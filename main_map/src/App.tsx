@@ -1,24 +1,21 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {useEffect} from 'react';
+import './App.sass';
+import MapContainer from "./Components/MapContainer/MapContainer";
+import ButtonsToolbar from "./Components/ButtonsToolbar/ButtonsToolbar";
 
 function App() {
+
+  useEffect(() => {
+    const ws = new WebSocket("wss://192.168.115.134:4443/mapW")
+    ws.onopen = () => console.log("opened")
+    ws.onerror = (e) => console.log("error", e)
+    ws.onclose = (e) => console.log("closed", e)
+  })
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="App" style={{height: window.innerHeight}}>
+      <ButtonsToolbar></ButtonsToolbar>
+      <MapContainer></MapContainer>
     </div>
   );
 }
