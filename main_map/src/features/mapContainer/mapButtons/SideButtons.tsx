@@ -29,7 +29,7 @@ function SideButtons(props: { ymaps: YMapsApi | null, width: string }) {
                             data={{content: name}}
                             defaultState={{selected: false}}
                             onClick={(e: any) => {
-                                console.log(e.originalEvent.target)
+                                console.log(`${name} was clicked`)
                             }}
                         />
                     )

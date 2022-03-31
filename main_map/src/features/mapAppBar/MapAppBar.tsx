@@ -18,7 +18,7 @@ const darkTheme = createTheme({
     spacing: 6,
 });
 
-function ButtonsToolbar() {
+function MapAppBar() {
 
     return (
         <ThemeProvider theme={darkTheme}>
@@ -44,4 +44,4 @@ function ButtonsToolbar() {
     )
 }
 
-export default ButtonsToolbar
+export default MapAppBar
