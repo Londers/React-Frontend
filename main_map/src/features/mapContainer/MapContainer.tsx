@@ -1,4 +1,4 @@
-import React, {useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {
     YMaps,
     Map,
@@ -14,16 +14,26 @@ import {
 import {Grid} from "@mui/material";
 import SideButtons from "./mapButtons/SideButtons";
 import TopButtons from "./mapButtons/TopButtons";
+import {useAppSelector} from "../../app/hooks";
 
 function MapContainer() {
     const mapRef = useRef<any>(null);
     const [ymaps, setYmaps] = useState<YMapsApi | null>(null)
     // const ymapsRef = useRef<YMapsApi | null>(null);
-    const mapState = {
-        center: [55.739625, 37.5412],
-        zoom: 12,
+
+    const boxPoint = useAppSelector(state => state.account.boxPoint)
+    const bounds = [[boxPoint.point0.Y, boxPoint.point0.X], [boxPoint.point1.Y, boxPoint.point1.X]]
+
+    const [mapState, setMapState] = useState({
+        bounds: bounds,
+        // zoom: 12,
         autoFitToViewport: true,
-    };
+    })
+
+    useEffect(() => {
+       setMapState({autoFitToViewport: true, bounds: bounds})
+    }, [boxPoint])
+
     const width = "200"
 
     return (
@@ -58,12 +68,12 @@ function MapContainer() {
                     />
                     <TrafficControl options={{float: 'right'}}/>
                     <TypeSelector options={{float: 'right'}}>
-                        <ListBoxItem options={{selectOnClick: true}} data={{ content: "Районы" }} />
-                        <ListBoxItem options={{selectOnClick: true}} data={{ content: "Подрайоны" }} />
-                        <ListBoxItem options={{selectOnClick: true}} data={{ content: "Камеры" }} />
-                        <ListBoxItem options={{selectOnClick: true}} data={{ content: "Направления" }} />
-                        <ListBoxItem options={{selectOnClick: true}} data={{ content: "Трекер" }} />
-                        <ListBoxItem options={{type: "separator"}} />
+                        <ListBoxItem options={{selectOnClick: true}} data={{content: "Районы"}}/>
+                        <ListBoxItem options={{selectOnClick: true}} data={{content: "Подрайоны"}}/>
+                        <ListBoxItem options={{selectOnClick: true}} data={{content: "Камеры"}}/>
+                        <ListBoxItem options={{selectOnClick: true}} data={{content: "Направления"}}/>
+                        <ListBoxItem options={{selectOnClick: true}} data={{content: "Трекер"}}/>
+                        <ListBoxItem options={{type: "separator"}}/>
                     </TypeSelector>
                     <FullscreenControl/>
                     <RulerControl options={{float: 'right'}}/>

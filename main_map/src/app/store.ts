@@ -1,5 +1,7 @@
 import {configureStore} from '@reduxjs/toolkit'
 import {accountSlice} from "../features/mapContainer/acccountSlice";
+import {WebSocketListenerMiddleware} from "../common/Middleware";
+// import {WebSocketMiddleware} from "../common/Middleware";
 
 export const store = configureStore({
     reducer: {
@@ -8,6 +10,7 @@ export const store = configureStore({
         // regions: regionsReducer,
         // trafficLights: trafficLightsReducer,
     },
+    middleware: getDefaultMiddleware => getDefaultMiddleware().prepend(WebSocketListenerMiddleware.middleware),
     // middleware: getDefaultMiddleware => getDefaultMiddleware().prepend(
     //     untypedMiddleware as Middleware<
     //         (action: Action<'specialAction'>) => number,
@@ -18,5 +21,6 @@ export const store = configureStore({
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>
+// export type AccountState = ReturnType<typeof accountSlice.reducer>
 // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof store.dispatch

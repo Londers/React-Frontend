@@ -1,13 +1,9 @@
 export interface WebSocketMessage {
     type: string,
-    data: MapInfo | EditCrossUsers
+    data: MapInfoMsg | TflightMsg | EditCrossUsersMsg | RepaintMsg | JumpMsg | LoginMsg | LogoutMsg | CheckConnMsg | FragmentMsg | ErrorMsg
 }
 
-export interface EditCrossUsers {
-    EditCrossUsers: []
-}
-
-export interface MapInfo {
+export interface MapInfoMsg {
     access: Access;
     area: Area;
     areaInfo: AreaInfo;
@@ -23,16 +19,65 @@ export interface MapInfo {
     tflight: Tflight[];
 }
 
+export interface TflightMsg {
+    tflight: Tflight[]
+}
+
+export interface EditCrossUsersMsg {
+    EditCrossUsers: EditCrossUser[]
+}
+
+export interface RepaintMsg {
+    areaZone: AreaZone[]
+    tflight: Tflight[]
+}
+
+export interface JumpMsg {
+    boxPoint: BoxPoint
+}
+
+export interface LoginMsg {
+    access: Access;
+    area: Area;
+    areaZone: AreaZone[];
+    authorizedFlag: boolean;
+    description: string;
+    fragments: Fragment[];
+    login: string;
+    region: string;
+    role: string;
+    status: boolean;
+    token: string;
+}
+
+export interface LogoutMsg {
+    authorizedFlag: boolean
+}
+
+export interface CheckConnMsg {
+    statusBD?: boolean
+    statusS?: boolean
+}
+
+export interface FragmentMsg {
+    fragment: Fragment[]
+    status: boolean
+}
+
+export interface ErrorMsg {
+    message: { error: string }
+}
+
 export interface AccountState {
     access: Access | undefined;
     area: Area | undefined;
     authorizedFlag: boolean;
-    boxPoint: BoxPoint | undefined;
-    description: string;
-    fragments: Fragment[];
+    boxPoint: BoxPoint;
+    description: string | undefined;
+    fragments: Fragment[] | undefined;
     license: string;
-    region: string;
-    role: string;
+    region: string | undefined;
+    role: string | undefined;
 }
 
 export interface Tflight {
@@ -46,6 +91,20 @@ export interface Tflight {
     phases: number[];
     points: Points;
     inputError: boolean;
+}
+
+export interface Pos {
+    region: string;
+    area: string;
+    id: number;
+}
+
+export interface EditCrossUser {
+    edit: boolean;
+    idevice: number;
+    pos: Pos;
+    description: string;
+    login: string;
 }
 
 export interface Access {
@@ -77,19 +136,14 @@ export interface AreaZone {
     sub: Sub[];
 }
 
-export interface Point0 {
-    Y: number;
-    X: number;
-}
-
-export interface Point1 {
+export interface Point {
     Y: number;
     X: number;
 }
 
 export interface BoxPoint {
-    point0: Point0;
-    point1: Point1;
+    point0: Point;
+    point1: Point;
 }
 
 export interface Fragment {

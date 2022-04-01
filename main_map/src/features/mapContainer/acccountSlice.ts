@@ -1,12 +1,12 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import type { RootState } from '../../app/store'
-import {AccountState, Fragment, MapInfo} from "../../common";
+import {createSlice, PayloadAction} from '@reduxjs/toolkit'
+import type {RootState} from '../../app/store'
+import {AccountState, FragmentMsg, LoginMsg, MapInfoMsg} from "../../common";
 
 const initialState: AccountState = {
     access: undefined,
     area: undefined,
     authorizedFlag: false,
-    boxPoint: undefined,
+    boxPoint: {point0: {Y: 53, X: 44}, point1: {Y: 55, X: 46}},
     description: "",
     fragments: [],
     license: "",
@@ -18,27 +18,30 @@ export const accountSlice = createSlice({
     name: 'account',
     initialState,
     reducers: {
-        setLogged: (state, action: PayloadAction<boolean>) => {
-            state.authorizedFlag = action.payload
+        setLogged: (state, action: PayloadAction<LoginMsg>) => {
+            state.authorizedFlag = action.payload.authorizedFlag
         },
-        setFragments: (state, action: PayloadAction<Fragment[]>) => {
-            state.fragments = action.payload
+        setFragments: (state, action: PayloadAction<FragmentMsg>) => {
+            state.fragments = action.payload.fragment
         },
-        fillAccountData: (state, action: PayloadAction<MapInfo>) => {
-            state.access = action.payload.access
-            state.area = action.payload.area
+        fillAccountData: (state, action: PayloadAction<MapInfoMsg>) => {
+            if (action.payload.authorizedFlag) {
+                state.access = action.payload.access
+                state.area = action.payload.area
+                state.description = action.payload.description
+                state.fragments = action.payload.fragments
+                state.region = action.payload.region
+                state.role = action.payload.role
+            }
             state.authorizedFlag = action.payload.authorizedFlag
             state.boxPoint = action.payload.boxPoint
-            state.description = action.payload.description
-            state.fragments = action.payload.fragments
             state.license = action.payload.license
-            state.region = action.payload.region
-            state.role = action.payload.role
+
         }
     }
 })
 
-export const { setLogged, setFragments, fillAccountData } = accountSlice.actions
+export const {setLogged, setFragments, fillAccountData} = accountSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectAccess = (state: RootState) => state.account.access
