@@ -1,7 +1,15 @@
 import React from "react";
 import {Button, ListBox, ListBoxItem} from "react-yandex-maps";
+import {wsSendMessage} from "../../../common/Middleware";
+import {useAppDispatch} from "../../../app/hooks";
 
 function TopButtons(props: { width: string }) {
+
+    const dispatch = useAppDispatch()
+
+    const handleClick = () => {
+        dispatch(wsSendMessage({type: "logOut"}))
+    }
 
     return (
         <>
@@ -21,6 +29,7 @@ function TopButtons(props: { width: string }) {
                 <ListBoxItem options={{selectOnClick: false}} data={{content: "Очистить список перекрёстков"}}/>
             </ListBox>
             <Button
+                onClick={handleClick}
                 options={{maxWidth: props.width, selectOnClick: false, float: "right", floatIndex: 3}}
                 data={{content: "Выход"}}
                 defaultState={{selected: false}}

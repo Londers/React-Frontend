@@ -6,6 +6,7 @@ import {
     ThemeProvider,
     Typography
 } from "@mui/material";
+import {useAppSelector} from "../../app/hooks";
 
 
 const darkTheme = createTheme({
@@ -20,6 +21,10 @@ const darkTheme = createTheme({
 
 function MapAppBar() {
 
+    const region = useAppSelector(state => state.account.region)
+    const description = useAppSelector(state => state.account.description)
+    const login = localStorage.getItem("login")
+
     return (
         <ThemeProvider theme={darkTheme}>
             <AppBar sx={{flexGrow: 1, height: "3,5vh"}} position={"sticky"}>
@@ -30,13 +35,13 @@ function MapAppBar() {
                 >
                     <img src="https://192.168.115.134:4443/free/resources/fullLogo.svg" alt="logo"/>
                     <Typography variant="h6">
-                        Все регионы
+                        {region}
                     </Typography>
                     <Typography variant="h6">
-                        АРМ дежурного - Popugai
+                        {description}
                     </Typography>
                     <Typography variant="h6">
-                        Admin
+                        {login}
                     </Typography>
                 </Grid>
             </AppBar>

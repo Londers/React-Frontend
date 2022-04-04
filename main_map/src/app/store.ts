@@ -1,6 +1,7 @@
 import {configureStore} from '@reduxjs/toolkit'
 import {accountSlice} from "../features/mapContainer/acccountSlice";
 import {WebSocketListenerMiddleware} from "../common/Middleware";
+import {mapContentSlice} from "../features/mapContainer/mapContentSlice";
 // import {WebSocketMiddleware} from "../common/Middleware";
 
 export const store = configureStore({
@@ -8,7 +9,7 @@ export const store = configureStore({
         account: accountSlice.reducer,
         // webSocket: webSocketReducer,
         // regions: regionsReducer,
-        // trafficLights: trafficLightsReducer,
+        mapContent: mapContentSlice.reducer,
     },
     middleware: getDefaultMiddleware => getDefaultMiddleware().prepend(WebSocketListenerMiddleware.middleware),
     // middleware: getDefaultMiddleware => getDefaultMiddleware().prepend(

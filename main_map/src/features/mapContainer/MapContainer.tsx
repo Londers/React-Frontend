@@ -9,30 +9,35 @@ import {
     RulerControl,
     GeolocationControl,
     FullscreenControl,
-    YMapsApi, ListBoxItem,
+    YMapsApi, ListBoxItem, Placemark, Button,
 } from 'react-yandex-maps';
 import {Grid} from "@mui/material";
 import SideButtons from "./mapButtons/SideButtons";
 import TopButtons from "./mapButtons/TopButtons";
 import {useAppSelector} from "../../app/hooks";
+import {selectAuthorized} from "./acccountSlice";
+import TrafficLights from "./TrafficLights";
+import LoginModal from "../../common/LoginModal";
 
 function MapContainer() {
     const mapRef = useRef<any>(null);
     const [ymaps, setYmaps] = useState<YMapsApi | null>(null)
-    // const ymapsRef = useRef<YMapsApi | null>(null);
 
     const boxPoint = useAppSelector(state => state.account.boxPoint)
     const bounds = [[boxPoint.point0.Y, boxPoint.point0.X], [boxPoint.point1.Y, boxPoint.point1.X]]
 
+    const authorized = useAppSelector(selectAuthorized)
+
     const [mapState, setMapState] = useState({
-        bounds: bounds,
+        bounds,
         // zoom: 12,
         autoFitToViewport: true,
     })
 
     useEffect(() => {
-       setMapState({autoFitToViewport: true, bounds: bounds})
+        setMapState({autoFitToViewport: true, bounds: bounds})
     }, [boxPoint])
+
 
     const width = "200"
 
@@ -68,19 +73,28 @@ function MapContainer() {
                     />
                     <TrafficControl options={{float: 'right'}}/>
                     <TypeSelector options={{float: 'right'}}>
-                        <ListBoxItem options={{selectOnClick: true}} data={{content: "Районы"}}/>
-                        <ListBoxItem options={{selectOnClick: true}} data={{content: "Подрайоны"}}/>
-                        <ListBoxItem options={{selectOnClick: true}} data={{content: "Камеры"}}/>
-                        <ListBoxItem options={{selectOnClick: true}} data={{content: "Направления"}}/>
-                        <ListBoxItem options={{selectOnClick: true}} data={{content: "Трекер"}}/>
-                        <ListBoxItem options={{type: "separator"}}/>
+                        {authorized &&
+                            <>
+                                <ListBoxItem data={{content: "Районы"}}/>
+                                <ListBoxItem data={{content: "Подрайоны"}}/>
+                                <ListBoxItem data={{content: "Камеры"}}/>
+                                <ListBoxItem data={{content: "Направления"}}/>
+                                <ListBoxItem data={{content: "Трекер"}}/>
+                                <ListBoxItem options={{type: "separator"}}/>
+                            </>
+                        }
                     </TypeSelector>
                     <FullscreenControl/>
                     <RulerControl options={{float: 'right'}}/>
-                    <React.Fragment>
-                        <TopButtons width={width}/>
-                        <SideButtons ymaps={ymaps} width={width}/>
-                    </React.Fragment>
+                    {authorized ?
+                        <>
+                            <TopButtons width={width}/>
+                            <SideButtons ymaps={ymaps} width={width}/>
+                        </>
+                        :
+                        <LoginModal width={width} />
+                    }
+                    <TrafficLights ymaps={ymaps} />
                 </Map>
             </YMaps>
         </Grid>
