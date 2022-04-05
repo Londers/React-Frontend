@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useMemo, useRef, useState} from "react";
 import {
     YMaps,
     Map,
@@ -9,22 +9,27 @@ import {
     RulerControl,
     GeolocationControl,
     FullscreenControl,
-    YMapsApi, ListBoxItem, Placemark, Button,
+    YMapsApi,
+    ListBoxItem,
 } from 'react-yandex-maps';
 import {Grid} from "@mui/material";
 import SideButtons from "./mapButtons/SideButtons";
 import TopButtons from "./mapButtons/TopButtons";
 import {useAppSelector} from "../../app/hooks";
 import {selectAuthorized} from "./acccountSlice";
-import TrafficLights from "./TrafficLights";
 import LoginModal from "../../common/LoginModal";
+import TrafficLightPlacemark from "./TrafficLightPlacemark";
+import {selectTFLights} from "./mapContentSlice";
 
 function MapContainer() {
     const mapRef = useRef<any>(null);
     const [ymaps, setYmaps] = useState<YMapsApi | null>(null)
 
     const boxPoint = useAppSelector(state => state.account.boxPoint)
-    const bounds = [[boxPoint.point0.Y, boxPoint.point0.X], [boxPoint.point1.Y, boxPoint.point1.X]]
+    const bounds = useMemo(
+        () => [[boxPoint.point0.Y, boxPoint.point0.X], [boxPoint.point1.Y, boxPoint.point1.X]],
+        [boxPoint.point0.X, boxPoint.point0.Y, boxPoint.point1.X, boxPoint.point1.Y]
+    )
 
     const authorized = useAppSelector(selectAuthorized)
 
@@ -36,8 +41,9 @@ function MapContainer() {
 
     useEffect(() => {
         setMapState({autoFitToViewport: true, bounds: bounds})
-    }, [boxPoint])
+    }, [bounds, boxPoint])
 
+    const trafficLights = useAppSelector(selectTFLights)
 
     const width = "200"
 
@@ -92,9 +98,11 @@ function MapContainer() {
                             <SideButtons ymaps={ymaps} width={width}/>
                         </>
                         :
-                        <LoginModal width={width} />
+                        <LoginModal width={width}/>
                     }
-                    <TrafficLights ymaps={ymaps} />
+                    {trafficLights?.map(trafficLight =>
+                        <TrafficLightPlacemark key={trafficLight.idevice} trafficLight={trafficLight} ymaps={ymaps}/>
+                    )}
                 </Map>
             </YMaps>
         </Grid>

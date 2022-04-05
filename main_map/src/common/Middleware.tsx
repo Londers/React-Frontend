@@ -1,6 +1,14 @@
 import {createAction, createListenerMiddleware, isAnyOf} from "@reduxjs/toolkit";
-import {IncomingDataType, LoginMsg, MapInfoMsg, OutcomingDataType, TflightMsg, WebSocketMessage} from "./index";
-import {fillAccountData, setLogged} from "../features/mapContainer/acccountSlice";
+import {
+    IncomingDataType,
+    LoginMsg,
+    LogoutMsg,
+    MapInfoMsg,
+    OutcomingDataType,
+    TflightMsg,
+    WebSocketMessage
+} from "./index";
+import {fillAccountData, setLogouted, setLogged} from "../features/mapContainer/acccountSlice";
 import {setInitialData, setTFLights} from "../features/mapContainer/mapContentSlice";
 
 export const wsConnect = createAction<string>("websocket/connect")
@@ -37,6 +45,7 @@ WebSocketListenerMiddleware.startListening({
                     listenerApi.dispatch(setLogged(action.payload.data as LoginMsg))
                     break;
                 case "logOut":
+                    listenerApi.dispatch(setLogouted(action.payload.data as LogoutMsg))
                     break;
                 case "editCrossUsers":
                     break;

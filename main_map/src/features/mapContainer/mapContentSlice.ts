@@ -22,7 +22,7 @@ export const mapContentSlice = createSlice({
         setTFLights: (state, action: PayloadAction<TflightMsg>) => {
             action.payload.tflight.forEach(updatedTfl => {
                 const index = state.tflight.findIndex((oldTfl) =>
-                    ((oldTfl.region === updatedTfl.region) && (oldTfl.area === updatedTfl.area) && (oldTfl.ID === updatedTfl.ID))
+                    ((oldTfl.region.num === updatedTfl.region.num) && (oldTfl.area.num === updatedTfl.area.num) && (oldTfl.ID === updatedTfl.ID))
                 )
                 if (index === -1) {
                     state.tflight.push(updatedTfl)

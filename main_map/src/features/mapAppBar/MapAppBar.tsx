@@ -20,7 +20,6 @@ const darkTheme = createTheme({
 });
 
 function MapAppBar() {
-
     const region = useAppSelector(state => state.account.region)
     const description = useAppSelector(state => state.account.description)
     const login = localStorage.getItem("login")
@@ -35,10 +34,13 @@ function MapAppBar() {
                 >
                     <img src="https://192.168.115.134:4443/free/resources/fullLogo.svg" alt="logo"/>
                     <Typography variant="h6">
-                        {region}
+                        {(region === "*") ? "Все регионы" : region}
                     </Typography>
                     <Typography variant="h6">
-                        {description}
+                        АРМ
+                        {
+                            description === "" ? "" :  " дежурного - " + description
+                        }
                     </Typography>
                     <Typography variant="h6">
                         {login}

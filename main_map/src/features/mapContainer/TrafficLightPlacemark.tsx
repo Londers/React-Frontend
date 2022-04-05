@@ -1,13 +1,13 @@
-import React from "react";
-import {useAppSelector} from "../../app/hooks";
-import {selectTFLights} from "./mapContentSlice";
+import React, {useCallback, useMemo} from "react";
+import {Tflight} from "../../common";
 import {Placemark, YMapsApi} from "react-yandex-maps";
 
-function TrafficLights(props: { ymaps: YMapsApi | null }) {
-    const getImage = (sost: number) => `https://192.168.115.134:4443/free/img/trafficLights/${sost}.svg`
-    const trafficLights = useAppSelector(selectTFLights)
+function TrafficLightPlacemark(props: { trafficLight: Tflight, ymaps: YMapsApi | null }) {
+    const trafficLight = props.trafficLight
 
-    const createChipsLayout = (calcFunc: Function, currnum: number, rotateDeg?: number) => {
+    const getImage = (sost: number) => `https://192.168.115.134:4443/free/img/trafficLights/${sost}.svg`
+
+    const createChipsLayout = useCallback((calcFunc: Function, currnum: number, rotateDeg?: number) => {
         const Chips = props.ymaps?.templateLayoutFactory.createClass(
             '<div class="placemark"  ' +
             `style="background-image:url(${getImage(currnum)}); ` +
@@ -52,7 +52,7 @@ function TrafficLights(props: { ymaps: YMapsApi | null }) {
             }
         )
         return Chips
-    }
+    }, [props.ymaps?.templateLayoutFactory])
 
     //Мастшабирование иконок светофороф на карте
     const calculate = function (zoom: number): number {
@@ -74,24 +74,26 @@ function TrafficLights(props: { ymaps: YMapsApi | null }) {
         }
     };
 
+    const memoizedPlacemark = useMemo(
+        () =>
+            <Placemark key={trafficLight.idevice}
+                       properties={{
+                           hintContent: `${trafficLight.description}<br>${trafficLight.tlsost.description}<br>` +
+                               `[${trafficLight.area.num}, ${trafficLight.subarea}, ${trafficLight.ID}, ${trafficLight.idevice}]`
+                       }}
+                       options={{
+                           iconLayout: createChipsLayout(calculate, trafficLight.tlsost.num)
+                       }}
+                       geometry={[trafficLight.points.Y, trafficLight.points.X]}
+                       modules={['geoObject.addon.hint']}
+                       onClick={() => console.log(trafficLight)}
+            />,
+        [createChipsLayout, trafficLight]
+    )
+
     return (
-        <>
-            {trafficLights?.map(trafficLight =>
-                <Placemark key={trafficLight.idevice}
-                           properties={{
-                               hintContent: `${trafficLight.description}<br>${trafficLight.tlsost.description}<br>` +
-                                   `[${trafficLight.area.num}, ${trafficLight.subarea}, ${trafficLight.ID}, ${trafficLight.idevice}]`
-                           }}
-                           options={{
-                               iconLayout: createChipsLayout(calculate, trafficLight.tlsost.num)
-                           }}
-                           geometry={[trafficLight.points.Y, trafficLight.points.X]}
-                           modules={['geoObject.addon.hint']}
-                           onClick={() => console.log(trafficLight)}
-                />
-            )}
-        </>
+        memoizedPlacemark
     )
 }
 
-export default TrafficLights;
+export default TrafficLightPlacemark

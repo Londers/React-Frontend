@@ -15,23 +15,36 @@ import {
 import {Button as YButton} from "react-yandex-maps";
 import {Visibility, VisibilityOff} from "@mui/icons-material";
 import {useAppDispatch, useAppSelector} from "../app/hooks";
-import {selectAuthorized} from "../features/mapContainer/acccountSlice";
+import {clearLoginError, selectAuthorized, selectError} from "../features/mapContainer/acccountSlice";
 import {wsSendMessage} from "./Middleware";
 
 function LoginModal(props: { width: string }) {
     const authorized = useAppSelector(selectAuthorized)
-    const [open, setOpen] = useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    const [open, setOpen] = useState(false)
     const [showPassword, setShowPassword] = useState<boolean>(false)
     const [password, setPassword] = useState<string>('')
     const [login, setLogin] = useState<string>('')
+    const [status, message] = useAppSelector(selectError)
     const dispatch = useAppDispatch()
 
+    const handleOpen = () => {
+        setLogin("")
+        setPassword("")
+        setOpen(true)
+    }
+    const handleClose = () => {
+        if (status) dispatch(clearLoginError())
+        setOpen(false)
+    }
+
     const handleSubmit = () => {
+        if (status) dispatch(clearLoginError())
         dispatch(wsSendMessage({type: "login", login, password}))
-        // console.log(login, password)
-        handleClose()
+        // handleClose()
+    }
+
+    const onKeyDownHandler = (e: React.KeyboardEvent) => {
+        if (e.key === "Enter") handleSubmit()
     }
 
     const handleLoginChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,7 +60,7 @@ function LoginModal(props: { width: string }) {
     }
 
     const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
+        event.preventDefault()
     }
 
     return (
@@ -59,7 +72,7 @@ function LoginModal(props: { width: string }) {
                 defaultState={{selected: false}}
                 onClick={handleOpen}/>
             }
-            <Dialog open={open} onClose={handleClose}>
+            <Dialog open={open} onClose={handleClose} onKeyDown={onKeyDownHandler}>
                 <DialogTitle>Авторизация</DialogTitle>
                 <DialogContent sx={{display: "grid"}}>
                     <TextField
@@ -73,14 +86,16 @@ function LoginModal(props: { width: string }) {
                         color="secondary"
                         required={true}
                         onChange={handleLoginChange}
+                        error={status as boolean}
                     />
-                    <FormControl sx={{marginTop: '1vh'}} variant="outlined" color="secondary">
+                    <FormControl sx={{marginTop: '1vh'}} variant="outlined" color="secondary" required={true}>
                         <InputLabel htmlFor="outlined-adornment-password">Пароль</InputLabel>
                         <OutlinedInput
                             id="outlined-adornment-password"
                             type={showPassword ? 'text' : 'password'}
                             value={password}
                             onChange={handlePasswordChange}
+                            error={status as boolean}
                             endAdornment={
                                 <InputAdornment position="end">
                                     <IconButton
@@ -96,6 +111,7 @@ function LoginModal(props: { width: string }) {
                             label="Пароль"
                         />
                     </FormControl>
+                    <p hidden={!status} style={{color: 'red'}}>{message ?? ""}</p>
                 </DialogContent>
                 <DialogActions>
                     <Button type="submit" onClick={handleSubmit}>Подтвердить</Button>

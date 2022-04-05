@@ -5,9 +5,18 @@ export interface WebSocketMessage<T> {
     password?: string
 }
 
-export type IncomingDataType = MapInfoMsg | TflightMsg | EditCrossUsersMsg | RepaintMsg | JumpMsg | LoginMsg | LogoutMsg | CheckConnMsg | FragmentMsg | ErrorMsg
+export type IncomingDataType =
+    MapInfoMsg
+    | TflightMsg
+    | EditCrossUsersMsg
+    | RepaintMsg
+    | JumpMsg
+    | LoginMsg
+    | LogoutMsg
+    | CheckConnMsg
+    | FragmentMsg
+    | ErrorMsg
 export type OutcomingDataType = SendLoginMsg
-
 
 export interface MapInfoMsg {
     access: Access;
@@ -54,12 +63,17 @@ export interface LoginMsg {
     role: string;
     status: boolean;
     token: string;
+    message?: string
 }
 
 export interface sendLoginMsg {
     type: string;
     login: string;
     password: string
+}
+
+export interface LogoutMsg {
+    authorizedFlag: boolean
 }
 
 export interface CheckConnMsg {
@@ -86,6 +100,9 @@ export interface AccountState {
     license: string;
     region: string;
     role: string;
+    login: string;
+    status: boolean
+    message: string | undefined
 }
 
 export interface MapContentState {
