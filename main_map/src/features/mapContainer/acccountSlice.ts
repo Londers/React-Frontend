@@ -65,7 +65,12 @@ export const accountSlice = createSlice({
         },
         setLogouted: (state, action: PayloadAction<LogoutMsg>) => {
             localStorage.setItem("login", "")
-            Object.assign(state, {...initialState, boxPoint: state.boxPoint, license: state.license, authorizedFlag: false})
+            Object.assign(state, {
+                ...initialState,
+                boxPoint: state.boxPoint,
+                license: state.license,
+                authorizedFlag: false
+            })
         },
         setFragments: (state, action: PayloadAction<FragmentMsg>) => {
             state.fragments = action.payload.fragment
@@ -82,6 +87,24 @@ export const {fillAccountData, setLogged, setLogouted, setFragments, clearLoginE
 // Other code such as selectors can use the imported `RootState` type
 export const selectAccess = (state: RootState) => state.account.access
 export const selectAuthorized = (state: RootState) => state.account.authorizedFlag
+export const selectRegionDesc = (state: RootState) =>
+        state.account.region === "*" ?
+        "Все регионы" :
+        state.mapContent.regionInfo[state.account.region]
+export const selectAvailableRegions= (state: RootState) => {
+    if (state.account.region === "*") {
+        return Object.entries(state.mapContent.regionInfo)
+    } else {
+        return [Object.entries(state.mapContent.regionInfo).find(reg => reg[0] === state.account.region) ?? ["-1", "Ошибка"]]
+    }
+}
+export const selectAvailableAreas = (state: RootState) => {
+    if (state.account.region === "*") {
+        return Object.entries(state.mapContent.areaInfo)
+    } else {
+        return [Object.entries(state.mapContent.areaInfo).find(ar => ar[0] === state.mapContent.regionInfo[state.account.region]) ?? ["-1", {}]]
+    }
+}
 export const selectError = (state: RootState) => [state.account.status, state.account.message]
 
 export default accountSlice.reducer

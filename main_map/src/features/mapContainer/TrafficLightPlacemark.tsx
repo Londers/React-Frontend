@@ -5,7 +5,13 @@ import {Placemark, YMapsApi} from "react-yandex-maps";
 function TrafficLightPlacemark(props: { trafficLight: Tflight, ymaps: YMapsApi | null }) {
     const trafficLight = props.trafficLight
 
-    const getImage = (sost: number) => `https://192.168.115.134:4443/free/img/trafficLights/${sost}.svg`
+    const getImage = (sost: number) => {
+        if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+            return `https://192.168.115.134:4443/free/img/trafficLights/${sost}.svg`
+        } else {
+            return window.location.origin + `/free/img/trafficLights/${sost}.svg`
+        }
+    }
 
     const createChipsLayout = useCallback((calcFunc: Function, currnum: number, rotateDeg?: number) => {
         const Chips = props.ymaps?.templateLayoutFactory.createClass(

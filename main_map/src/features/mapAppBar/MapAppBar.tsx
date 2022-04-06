@@ -7,6 +7,7 @@ import {
     Typography
 } from "@mui/material";
 import {useAppSelector} from "../../app/hooks";
+import {selectRegionDesc} from "../mapContainer/acccountSlice";
 
 
 const darkTheme = createTheme({
@@ -20,7 +21,7 @@ const darkTheme = createTheme({
 });
 
 function MapAppBar() {
-    const region = useAppSelector(state => state.account.region)
+    const region = useAppSelector(selectRegionDesc)
     const description = useAppSelector(state => state.account.description)
     const login = localStorage.getItem("login")
 
@@ -32,14 +33,18 @@ function MapAppBar() {
                       alignItems="center"
                       paddingX={10}
                 >
-                    <img src="https://192.168.115.134:4443/free/resources/fullLogo.svg" alt="logo"/>
+                    {
+                        (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') ?
+                            <img src="https://192.168.115.134:4443/free/resources/fullLogo.svg" alt="logo"/> :
+                            <img src={window.location.origin + "/free/resources/fullLogo.svg"} alt="logo"/>
+                    }
                     <Typography variant="h6">
-                        {(region === "*") ? "Все регионы" : region}
+                        {region}
                     </Typography>
                     <Typography variant="h6">
                         АРМ
                         {
-                            description === "" ? "" :  " дежурного - " + description
+                            description === "" ? "" : " дежурного - " + description
                         }
                     </Typography>
                     <Typography variant="h6">

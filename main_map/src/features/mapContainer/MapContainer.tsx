@@ -17,7 +17,7 @@ import SideButtons from "./mapButtons/SideButtons";
 import TopButtons from "./mapButtons/TopButtons";
 import {useAppSelector} from "../../app/hooks";
 import {selectAuthorized} from "./acccountSlice";
-import LoginModal from "../../common/LoginModal";
+import LoginDialog from "../../common/LoginDialog";
 import TrafficLightPlacemark from "./TrafficLightPlacemark";
 import {selectTFLights} from "./mapContentSlice";
 
@@ -98,7 +98,7 @@ function MapContainer() {
                             <SideButtons ymaps={ymaps} width={width}/>
                         </>
                         :
-                        <LoginModal width={width}/>
+                        <LoginDialog width={width}/>
                     }
                     {trafficLights?.map(trafficLight =>
                         <TrafficLightPlacemark key={trafficLight.idevice} trafficLight={trafficLight} ymaps={ymaps}/>

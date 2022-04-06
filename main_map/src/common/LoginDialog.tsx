@@ -18,7 +18,7 @@ import {useAppDispatch, useAppSelector} from "../app/hooks";
 import {clearLoginError, selectAuthorized, selectError} from "../features/mapContainer/acccountSlice";
 import {wsSendMessage} from "./Middleware";
 
-function LoginModal(props: { width: string }) {
+function LoginDialog(props: { width: string }) {
     const authorized = useAppSelector(selectAuthorized)
     const [open, setOpen] = useState(false)
     const [showPassword, setShowPassword] = useState<boolean>(false)
@@ -40,7 +40,6 @@ function LoginModal(props: { width: string }) {
     const handleSubmit = () => {
         if (status) dispatch(clearLoginError())
         dispatch(wsSendMessage({type: "login", login, password}))
-        // handleClose()
     }
 
     const onKeyDownHandler = (e: React.KeyboardEvent) => {
@@ -122,4 +121,4 @@ function LoginModal(props: { width: string }) {
     )
 }
 
-export default LoginModal
+export default LoginDialog

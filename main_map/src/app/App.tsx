@@ -6,18 +6,22 @@ import {useAppDispatch} from "./hooks";
 import {wsConnect} from "../common/Middleware";
 
 function App() {
-  const dispatch = useAppDispatch()
+    const dispatch = useAppDispatch()
 
-  useEffect(() => {
-    dispatch(wsConnect("wss://192.168.115.134:4443/mapW"))
-  })
+    useEffect(() => {
+        if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
+            dispatch(wsConnect("wss://192.168.115.134:4443/mapW"))
+        } else {
+            dispatch(wsConnect(`wss://${window.location.host}/mapW`))
+        }
+    })
 
-  return (
-    <div className="App" style={{height: window.innerHeight}}>
-      <MapAppBar />
-      <MapContainer />
-    </div>
-  );
+    return (
+        <div className="App" style={{height: window.innerHeight}}>
+            <MapAppBar/>
+            <MapContainer/>
+        </div>
+    );
 }
 
 export default App;

@@ -1,17 +1,38 @@
-import React from "react";
+import React, {useState} from "react";
 import {Button, YMapsApi} from "react-yandex-maps";
 import './SideButtons.sass'
+import AreaDialog from "../../../common/AreaDialog";
 
-const buttonsNames = ["Сервер связи", "Журнал клиентов", "Журнал системы", "ДУ", "Стандартные ЗУ", "Произвольные ЗУ",
-    "Управление по хар. точкам", "Предупреждения"]
 const indent = 25
 
 function SideButtons(props: { ymaps: YMapsApi | null, width: string }) {
+    const [openModal, setOpenModal] = useState<boolean>(false)
+    const techArmButton = () => setOpenModal(true)
+    const openTab = (path: string) => {
+        if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+            window.open("/user/" + localStorage.getItem("login") + path)
+        } else {
+            window.open(window.location.origin + "/user/" + localStorage.getItem("login") + path)
+        }
+    }
+    const alarmButton = () => setOpenModal(true)
+
+    const buttonsNames = [
+        ["Сервер связи", techArmButton],
+        ["Журнал клиентов", () => openTab("/deviceLog")],
+        ["Журнал системы", () => openTab("/manage/serverLog")],
+        ["ДУ", () => openTab("/dispatchControl")],
+        ["Стандартные ЗУ", () => openTab("/greenStreet")],
+        ["Произвольные ЗУ", () => openTab("/arbitraryGS")],
+        ["Управление по хар. точкам", () => openTab("/charPoints")],
+        ["Предупреждения", alarmButton],
+    ]
+
     return (
         props.ymaps &&
-        <React.Fragment>
+        <>
             {
-                buttonsNames.map((name, index) => (
+                buttonsNames.map(([name, handler], index) => (
                         <Button
                             key={index}
                             options={{
@@ -28,14 +49,13 @@ function SideButtons(props: { ymaps: YMapsApi | null, width: string }) {
                             }}
                             data={{content: name}}
                             defaultState={{selected: false}}
-                            onClick={() => {
-                                console.log(`${name} was clicked`)
-                            }}
+                            onClick={handler}
                         />
                     )
                 )
             }
-        </React.Fragment>
+            <AreaDialog open={openModal} setOpen={setOpenModal}/>
+        </>
     )
 }
 
