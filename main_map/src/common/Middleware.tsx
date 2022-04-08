@@ -1,19 +1,18 @@
 import {createAction, createListenerMiddleware, isAnyOf} from "@reduxjs/toolkit";
 import {
-    IncomingDataType,
     LoginMsg,
     LogoutMsg,
     MapInfoMsg,
-    OutcomingDataType,
     TflightMsg,
-    WebSocketMessage
+    IncomingWebSocketMessage,
+    OutcomingWebSocketMessage, JumpMsg, RepaintMsg
 } from "./index";
 import {fillAccountData, setLogouted, setLogged} from "../features/mapContainer/acccountSlice";
-import {setInitialData, setTFLights} from "../features/mapContainer/mapContentSlice";
+import {setBoxPoint, setInitialData, setRepaint, setTFLights} from "../features/mapContainer/mapContentSlice";
 
 export const wsConnect = createAction<string>("websocket/connect")
-export const wsGetMessage = createAction<WebSocketMessage<IncomingDataType>>('websocket/message')
-export const wsSendMessage = createAction<WebSocketMessage<OutcomingDataType>>('websocket/send')
+export const wsGetMessage = createAction<IncomingWebSocketMessage>('websocket/message')
+export const wsSendMessage = createAction<OutcomingWebSocketMessage>('websocket/send')
 export const WebSocketListenerMiddleware = createListenerMiddleware()
 let ws: WebSocket
 
@@ -27,7 +26,7 @@ WebSocketListenerMiddleware.startListening({
             ws.onclose = (e) => console.log("closed", e)
             ws.onmessage = (e) => listenerApi.dispatch(wsGetMessage(JSON.parse(e.data)))
         } else if (wsSendMessage.match(action)) {
-            ws.send(JSON.stringify(action.payload as WebSocketMessage<OutcomingDataType>))
+            ws.send(JSON.stringify(action.payload as OutcomingWebSocketMessage))
         } else if (wsGetMessage.match(action)) {
             switch (action.payload.type) {
                 case "mapInfo":
@@ -38,8 +37,10 @@ WebSocketListenerMiddleware.startListening({
                     listenerApi.dispatch(setTFLights(action.payload.data as TflightMsg))
                     break;
                 case "repaint":
+                    listenerApi.dispatch(setRepaint(action.payload.data as RepaintMsg))
                     break;
                 case "jump":
+                    listenerApi.dispatch(setBoxPoint(action.payload.data as JumpMsg))
                     break;
                 case "login":
                     listenerApi.dispatch(setLogged(action.payload.data as LoginMsg))
@@ -58,7 +59,7 @@ WebSocketListenerMiddleware.startListening({
                 case "error":
                     break;
                 default:
-                    console.log(action.type)
+                    console.log("type not found:", action.payload)
                     break;
             }
         }

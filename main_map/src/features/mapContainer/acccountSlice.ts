@@ -6,7 +6,7 @@ import {
     Area,
     AreaZone,
     Fragment,
-    FragmentMsg,
+    FragmentMsg, JumpMsg,
     LoginMsg,
     LogoutMsg,
     MapInfoMsg
@@ -16,7 +16,6 @@ const initialState: AccountState = {
     access: undefined,
     area: undefined,
     authorizedFlag: localStorage.getItem("login") !== '',
-    boxPoint: {point0: {Y: 53, X: 44}, point1: {Y: 55, X: 46}},
     description: "",
     fragments: [],
     license: "",
@@ -41,7 +40,6 @@ export const accountSlice = createSlice({
                 state.role = action.payload.role
             }
             state.authorizedFlag = action.payload.authorizedFlag
-            state.boxPoint = action.payload.boxPoint
             state.license = action.payload.license
         },
         setLogged: (state, action: PayloadAction<LoginMsg>) => {
@@ -67,7 +65,6 @@ export const accountSlice = createSlice({
             localStorage.setItem("login", "")
             Object.assign(state, {
                 ...initialState,
-                boxPoint: state.boxPoint,
                 license: state.license,
                 authorizedFlag: false
             })

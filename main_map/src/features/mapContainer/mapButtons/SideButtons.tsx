@@ -6,16 +6,20 @@ import AreaDialog from "../../../common/AreaDialog";
 const indent = 25
 
 function SideButtons(props: { ymaps: YMapsApi | null, width: string }) {
-    const [openModal, setOpenModal] = useState<boolean>(false)
-    const techArmButton = () => setOpenModal(true)
-    const openTab = (path: string) => {
-        if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
-            window.open("/user/" + localStorage.getItem("login") + path)
-        } else {
-            window.open(window.location.origin + "/user/" + localStorage.getItem("login") + path)
-        }
+    const [openDialog, setOpenDialog] = useState<boolean>(false)
+    const [callerPath, setCallerPath] = useState<string>("")
+
+    const techArmButton = () => {
+        setCallerPath("/techArm")
+        setOpenDialog(true)
     }
-    const alarmButton = () => setOpenModal(true)
+    const openTab = (path: string) => {
+        window.open(window.location.origin + "/user/" + localStorage.getItem("login") + path)
+    }
+    const alarmButton = () => {
+        setCallerPath("/alarm")
+        setOpenDialog(true)
+    }
 
     const buttonsNames = [
         ["Сервер связи", techArmButton],
@@ -27,6 +31,16 @@ function SideButtons(props: { ymaps: YMapsApi | null, width: string }) {
         ["Управление по хар. точкам", () => openTab("/charPoints")],
         ["Предупреждения", alarmButton],
     ]
+
+    const setOpenMiddleware = (open: boolean, region: string, areas: string[]) => {
+        setOpenDialog(open)
+        if (region === "") return
+        if (areas.length === 0) {
+            openTab(callerPath + "?Region=" + region)
+        } else {
+            openTab(callerPath + "?Region=" + region + "&Area=" + areas.join("&Area="))
+        }
+    }
 
     return (
         props.ymaps &&
@@ -54,7 +68,7 @@ function SideButtons(props: { ymaps: YMapsApi | null, width: string }) {
                     )
                 )
             }
-            <AreaDialog open={openModal} setOpen={setOpenModal}/>
+            <AreaDialog open={openDialog} setOpen={setOpenMiddleware} showAreas={false}/>
         </>
     )
 }

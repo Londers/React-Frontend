@@ -1,4 +1,4 @@
-import {MapContentState, MapInfoMsg, TflightMsg} from "../../common";
+import {JumpMsg, MapContentState, MapInfoMsg, RepaintMsg, TflightMsg} from "../../common";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {RootState} from "../../app/store";
 
@@ -6,6 +6,7 @@ const initialState: MapContentState = {
     regionInfo: {},
     areaInfo: {},
     areaZone: [],
+    boxPoint: {point0: {Y: 53, X: 44}, point1: {Y: 55, X: 46}},
     tflight: [],
 }
 
@@ -16,6 +17,14 @@ export const mapContentSlice = createSlice({
         setInitialData: (state, action: PayloadAction<MapInfoMsg>) => {
             state.regionInfo = action.payload.regionInfo
             state.areaInfo = action.payload.areaInfo
+            state.areaZone = action.payload.areaZone
+            state.boxPoint = action.payload.boxPoint
+            state.tflight = action.payload.tflight
+        },
+        setBoxPoint: (state, action: PayloadAction<JumpMsg>) => {
+            state.boxPoint = action.payload.boxPoint
+        },
+        setRepaint: (state, action: PayloadAction<RepaintMsg>) => {
             state.areaZone = action.payload.areaZone
             state.tflight = action.payload.tflight
         },
@@ -34,7 +43,7 @@ export const mapContentSlice = createSlice({
     }
 })
 
-export const {setInitialData, setTFLights} = mapContentSlice.actions
+export const {setInitialData, setBoxPoint, setRepaint, setTFLights} = mapContentSlice.actions
 
 export const selectTFLights = (state: RootState) => state.mapContent.tflight
 

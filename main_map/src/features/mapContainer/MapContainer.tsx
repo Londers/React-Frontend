@@ -25,7 +25,7 @@ function MapContainer() {
     const mapRef = useRef<any>(null);
     const [ymaps, setYmaps] = useState<YMapsApi | null>(null)
 
-    const boxPoint = useAppSelector(state => state.account.boxPoint)
+    const boxPoint = useAppSelector(state => state.mapContent.boxPoint)
     const bounds = useMemo(
         () => [[boxPoint.point0.Y, boxPoint.point0.X], [boxPoint.point1.Y, boxPoint.point1.X]],
         [boxPoint.point0.X, boxPoint.point0.Y, boxPoint.point1.X, boxPoint.point1.Y]
@@ -94,7 +94,7 @@ function MapContainer() {
                     <RulerControl options={{float: 'right'}}/>
                     {authorized ?
                         <>
-                            <TopButtons width={width}/>
+                            <TopButtons ymaps={ymaps} width={width}/>
                             <SideButtons ymaps={ymaps} width={width}/>
                         </>
                         :

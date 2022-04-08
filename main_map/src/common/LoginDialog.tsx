@@ -66,51 +66,55 @@ function LoginDialog(props: { width: string }) {
         <>
             {!authorized &&
                 <YButton
-                options={{maxWidth: props.width, selectOnClick: false, float: "right", floatIndex: 3}}
-                data={{content: "Вход"}}
-                defaultState={{selected: false}}
-                onClick={handleOpen}/>
+                    options={{maxWidth: props.width, selectOnClick: false, float: "right", floatIndex: 3}}
+                    data={{content: "Вход"}}
+                    defaultState={{selected: false}}
+                    onClick={handleOpen}/>
             }
             <Dialog open={open} onClose={handleClose} onKeyDown={onKeyDownHandler}>
                 <DialogTitle>Авторизация</DialogTitle>
-                <DialogContent sx={{display: "grid"}}>
-                    <TextField
-                        autoFocus
-                        value={login}
-                        margin="dense"
-                        id="name"
-                        label="Логин"
-                        type="login"
-                        variant="outlined"
-                        color="secondary"
-                        required={true}
-                        onChange={handleLoginChange}
-                        error={status as boolean}
-                    />
-                    <FormControl sx={{marginTop: '1vh'}} variant="outlined" color="secondary" required={true}>
-                        <InputLabel htmlFor="outlined-adornment-password">Пароль</InputLabel>
-                        <OutlinedInput
-                            id="outlined-adornment-password"
-                            type={showPassword ? 'text' : 'password'}
-                            value={password}
-                            onChange={handlePasswordChange}
+                <DialogContent>
+                    <form style={{display: "grid"}}>
+                        <TextField
+                            autoFocus
+                            value={login}
+                            margin="dense"
+                            id="name"
+                            autoComplete="username"
+                            label="Логин"
+                            type="text"
+                            variant="outlined"
+                            color="secondary"
+                            required={true}
+                            onChange={handleLoginChange}
                             error={status as boolean}
-                            endAdornment={
-                                <InputAdornment position="end">
-                                    <IconButton
-                                        aria-label="toggle password visibility"
-                                        onClick={handleClickShowPassword}
-                                        onMouseDown={handleMouseDownPassword}
-                                        edge="end"
-                                    >
-                                        {showPassword ? <VisibilityOff/> : <Visibility/>}
-                                    </IconButton>
-                                </InputAdornment>
-                            }
-                            label="Пароль"
                         />
-                    </FormControl>
-                    <p hidden={!status} style={{color: 'red'}}>{message ?? ""}</p>
+                        <FormControl sx={{marginTop: '1vh'}} variant="outlined" color="secondary" required={true}>
+                            <InputLabel htmlFor="outlined-adornment-password">Пароль</InputLabel>
+                            <OutlinedInput
+                                id="outlined-adornment-password"
+                                autoComplete="current-password"
+                                type={showPassword ? 'text' : 'password'}
+                                value={password}
+                                onChange={handlePasswordChange}
+                                error={status as boolean}
+                                endAdornment={
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            aria-label="toggle password visibility"
+                                            onClick={handleClickShowPassword}
+                                            onMouseDown={handleMouseDownPassword}
+                                            edge="end"
+                                        >
+                                            {showPassword ? <VisibilityOff/> : <Visibility/>}
+                                        </IconButton>
+                                    </InputAdornment>
+                                }
+                                label="Пароль"
+                            />
+                        </FormControl>
+                        <p hidden={!status} style={{color: 'red'}}>{message ?? ""}</p>
+                    </form>
                 </DialogContent>
                 <DialogActions>
                     <Button type="submit" onClick={handleSubmit}>Подтвердить</Button>

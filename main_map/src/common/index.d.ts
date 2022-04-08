@@ -1,8 +1,6 @@
-export interface WebSocketMessage<T> {
+export interface IncomingWebSocketMessage {
     type: string
-    data?: T
-    login?: string
-    password?: string
+    data: IncomingDataType
 }
 
 export type IncomingDataType =
@@ -16,7 +14,10 @@ export type IncomingDataType =
     | CheckConnMsg
     | FragmentMsg
     | ErrorMsg
-export type OutcomingDataType = SendLoginMsg
+
+export type OutcomingWebSocketMessage = OutcomingDataType
+
+export type OutcomingDataType = SendLoginMsg | SendJumpMsg | SendLogoutMsg
 
 export interface MapInfoMsg {
     access: Access;
@@ -51,6 +52,12 @@ export interface JumpMsg {
     boxPoint: BoxPoint
 }
 
+export interface SendJumpMsg {
+    type: string
+    region: string
+    area: string[]
+}
+
 export interface LoginMsg {
     access: Access;
     area: Area;
@@ -66,7 +73,7 @@ export interface LoginMsg {
     message?: string
 }
 
-export interface sendLoginMsg {
+export interface SendLoginMsg {
     type: string;
     login: string;
     password: string
@@ -74,6 +81,10 @@ export interface sendLoginMsg {
 
 export interface LogoutMsg {
     authorizedFlag: boolean
+}
+
+export interface SendLogoutMsg {
+    type: string
 }
 
 export interface CheckConnMsg {
@@ -94,7 +105,6 @@ export interface AccountState {
     access: Access | undefined;
     area: Area | undefined;
     authorizedFlag: boolean;
-    boxPoint: BoxPoint;
     description: string;
     fragments: Fragment[];
     license: string;
@@ -109,6 +119,7 @@ export interface MapContentState {
     areaInfo: AreaInfo;
     areaZone: AreaZone[];
     regionInfo: RegionInfo;
+    boxPoint: BoxPoint;
     tflight: Tflight[];
 }
 
