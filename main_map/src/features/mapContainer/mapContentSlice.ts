@@ -7,7 +7,7 @@ const initialState: MapContentState = {
     areaInfo: {},
     areaZone: [],
     boxPoint: {point0: {Y: 53, X: 44}, point1: {Y: 55, X: 46}},
-    tflight: [],
+    tflight: []
 }
 
 export const mapContentSlice = createSlice({

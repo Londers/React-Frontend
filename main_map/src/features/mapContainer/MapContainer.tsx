@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useRef, useState} from "react";
+import React, {createContext, useEffect, useMemo, useRef, useState} from "react";
 import {
     YMaps,
     Map,
@@ -21,6 +21,8 @@ import LoginDialog from "../../common/LoginDialog";
 import TrafficLightPlacemark from "./TrafficLightPlacemark";
 import {selectTFLights} from "./mapContentSlice";
 
+export const MapContext = createContext<any | undefined>(undefined);
+
 function MapContainer() {
     const mapRef = useRef<any>(null);
     const [ymaps, setYmaps] = useState<YMapsApi | null>(null)
@@ -30,7 +32,6 @@ function MapContainer() {
         () => [[boxPoint.point0.Y, boxPoint.point0.X], [boxPoint.point1.Y, boxPoint.point1.X]],
         [boxPoint.point0.X, boxPoint.point0.Y, boxPoint.point1.X, boxPoint.point1.Y]
     )
-
     const authorized = useAppSelector(selectAuthorized)
 
     const [mapState, setMapState] = useState({
@@ -93,10 +94,10 @@ function MapContainer() {
                     <FullscreenControl/>
                     <RulerControl options={{float: 'right'}}/>
                     {authorized ?
-                        <>
+                        <MapContext.Provider value={mapRef.current}>
                             <TopButtons ymaps={ymaps} width={width}/>
                             <SideButtons ymaps={ymaps} width={width}/>
-                        </>
+                        </MapContext.Provider>
                         :
                         <LoginDialog width={width}/>
                     }

@@ -17,22 +17,22 @@ export type IncomingDataType =
 
 export type OutcomingWebSocketMessage = OutcomingDataType
 
-export type OutcomingDataType = SendLoginMsg | SendJumpMsg | SendLogoutMsg
+export type OutcomingDataType = SendLoginMsg | SendJumpMsg | SendLogoutMsg | CreateFragmentMsg
 
 export interface MapInfoMsg {
-    access: Access;
-    area: Area;
-    areaInfo: AreaInfo;
-    areaZone: AreaZone[];
-    authorizedFlag: boolean;
-    boxPoint: BoxPoint;
-    description: string;
-    fragments: Fragment[];
-    license: string;
-    region: string;
-    regionInfo: RegionInfo;
-    role: string;
-    tflight: Tflight[];
+    access: Access
+    area: Area
+    areaInfo: AreaInfo
+    areaZone: AreaZone[]
+    authorizedFlag: boolean
+    boxPoint: BoxPoint
+    description: string
+    fragments: Fragment[]
+    license: string
+    region: string
+    regionInfo: RegionInfo
+    role: string
+    tflight: Tflight[]
 }
 
 export interface TflightMsg {
@@ -59,23 +59,23 @@ export interface SendJumpMsg {
 }
 
 export interface LoginMsg {
-    access: Access;
-    area: Area;
-    areaZone: AreaZone[];
-    authorizedFlag: boolean;
-    description: string;
-    fragments: Fragment[];
-    login: string;
-    region: string;
-    role: string;
-    status: boolean;
-    token: string;
+    access: Access
+    area: Area
+    areaZone: AreaZone[]
+    authorizedFlag: boolean
+    description: string
+    fragments: Fragment[]
+    login: string
+    region: string
+    role: string
+    status: boolean
+    token: string
     message?: string
 }
 
 export interface SendLoginMsg {
-    type: string;
-    login: string;
+    type: string
+    login: string
     password: string
 }
 
@@ -97,57 +97,65 @@ export interface FragmentMsg {
     status: boolean
 }
 
+export interface CreateFragmentMsg {
+    type: string,
+    data: {
+        name: string
+        bounds: number[][]
+    }
+}
+
 export interface ErrorMsg {
     message: { error: string }
 }
 
 export interface AccountState {
-    access: Access | undefined;
-    area: Area | undefined;
-    authorizedFlag: boolean;
-    description: string;
-    fragments: Fragment[];
-    license: string;
-    region: string;
-    role: string;
-    login: string;
+    access: Access | undefined
+    area: Area | undefined
+    authorizedFlag: boolean
+    description: string
+    fragments: Fragment[]
+    license: string
+    region: string
+    role: string
+    login: string
     status: boolean
     message: string | undefined
 }
 
 export interface MapContentState {
-    areaInfo: AreaInfo;
-    areaZone: AreaZone[];
-    regionInfo: RegionInfo;
-    boxPoint: BoxPoint;
-    tflight: Tflight[];
+    areaInfo: AreaInfo
+    areaZone: AreaZone[]
+    regionInfo: RegionInfo
+    boxPoint: BoxPoint
+    tflight: Tflight[]
 }
 
 export interface Tflight {
-    ID: number;
-    region: Region;
-    area: Area2;
-    subarea: number;
-    idevice: number;
-    tlsost: Tlsost;
-    description: string;
-    phases: number[];
-    points: Points;
-    inputError: boolean;
+    ID: number
+    region: Region
+    area: Area2
+    subarea: number
+    idevice: number
+    tlsost: Tlsost
+    description: string
+    phases: number[]
+    points: Points
+    inputError: boolean
 }
 
 export interface Pos {
-    region: string;
-    area: string;
-    id: number;
+    region: string
+    area: string
+    id: number
 }
 
 export interface EditCrossUser {
-    edit: boolean;
-    idevice: number;
-    pos: Pos;
-    description: string;
-    login: string;
+    edit: boolean
+    idevice: number
+    pos: Pos
+    description: string
+    login: string
 }
 
 export interface Access {
@@ -163,35 +171,35 @@ export interface AreaInfo {
 }
 
 export interface Zone {
-    Y: number;
-    X: number;
+    Y: number
+    X: number
 }
 
 export interface Sub {
-    subArea: number;
-    zone: Zone[];
+    subArea: number
+    zone: Zone[]
 }
 
 export interface AreaZone {
-    region: string;
-    area: string;
-    zone: Zone[];
-    sub: Sub[];
+    region: string
+    area: string
+    zone: Zone[]
+    sub: Sub[]
 }
 
 export interface Point {
-    Y: number;
-    X: number;
+    Y: number
+    X: number
 }
 
 export interface BoxPoint {
-    point0: Point;
-    point1: Point;
+    point0: Point
+    point1: Point
 }
 
 export interface Fragment {
-    name: string;
-    bounds: number[][];
+    name: string
+    bounds: number[][]
 }
 
 export interface RegionInfo {
@@ -199,22 +207,22 @@ export interface RegionInfo {
 }
 
 export interface Region {
-    num: string;
-    nameRegion: string;
+    num: string
+    nameRegion: string
 }
 
 export interface Area2 {
-    num: string;
-    nameArea: string;
+    num: string
+    nameArea: string
 }
 
 export interface Tlsost {
-    num: number;
-    description: string;
-    control: boolean;
+    num: number
+    description: string
+    control: boolean
 }
 
 export interface Points {
-    Y: number;
-    X: number;
+    Y: number
+    X: number
 }

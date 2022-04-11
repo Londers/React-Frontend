@@ -1,13 +1,8 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit'
 import type {RootState} from '../../app/store'
 import {
-    Access,
     AccountState,
-    Area,
-    AreaZone,
-    Fragment,
-    FragmentMsg, JumpMsg,
-    LoginMsg,
+    FragmentMsg, LoginMsg,
     LogoutMsg,
     MapInfoMsg
 } from "../../common";
@@ -84,6 +79,7 @@ export const {fillAccountData, setLogged, setLogouted, setFragments, clearLoginE
 // Other code such as selectors can use the imported `RootState` type
 export const selectAccess = (state: RootState) => state.account.access
 export const selectAuthorized = (state: RootState) => state.account.authorizedFlag
+export const selectFragments = (state: RootState) => state.account.fragments ?? []
 export const selectRegionDesc = (state: RootState) =>
         state.account.region === "*" ?
         "Все регионы" :
