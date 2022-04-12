@@ -5,10 +5,16 @@ import {
     MapInfoMsg,
     TflightMsg,
     IncomingWebSocketMessage,
-    OutcomingWebSocketMessage, JumpMsg, RepaintMsg
+    OutcomingWebSocketMessage, JumpMsg, RepaintMsg, ChangeFragmentsMsg, CheckConnMsg
 } from "./index";
-import {fillAccountData, setLogouted, setLogged} from "../features/mapContainer/acccountSlice";
-import {setBoxPoint, setInitialData, setRepaint, setTFLights} from "../features/mapContainer/mapContentSlice";
+import {fillAccountData, setLogouted, setLogged, setFragments} from "../features/mapContainer/acccountSlice";
+import {
+    setBoxPoint,
+    setInitialData,
+    setRepaint,
+    setStatus,
+    setTFLights
+} from "../features/mapContainer/mapContentSlice";
 
 export const wsConnect = createAction<string>("websocket/connect")
 export const wsGetMessage = createAction<IncomingWebSocketMessage>('websocket/message')
@@ -51,10 +57,13 @@ WebSocketListenerMiddleware.startListening({
                 case "editCrossUsers":
                     break;
                 case "checkConn":
+                    listenerApi.dispatch(setStatus(action.payload.data as CheckConnMsg))
                     break;
                 case "createFragment":
+                    listenerApi.dispatch(setFragments(action.payload.data as ChangeFragmentsMsg))
                     break;
                 case "deleteFragment":
+                    listenerApi.dispatch(setFragments(action.payload.data as ChangeFragmentsMsg))
                     break;
                 case "error":
                     break;

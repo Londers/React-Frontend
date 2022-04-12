@@ -17,7 +17,7 @@ import SideButtons from "./mapButtons/SideButtons";
 import TopButtons from "./mapButtons/TopButtons";
 import {useAppSelector} from "../../app/hooks";
 import {selectAuthorized} from "./acccountSlice";
-import LoginDialog from "../../common/LoginDialog";
+import LoginDialog from "../login/LoginDialog";
 import TrafficLightPlacemark from "./TrafficLightPlacemark";
 import {selectTFLights} from "./mapContentSlice";
 

@@ -1,3 +1,5 @@
+import {bottomNavigationActionClasses} from "@mui/material";
+
 export interface IncomingWebSocketMessage {
     type: string
     data: IncomingDataType
@@ -13,11 +15,12 @@ export type IncomingDataType =
     | LogoutMsg
     | CheckConnMsg
     | FragmentMsg
+    | ChangeFragmentsMsg
     | ErrorMsg
 
 export type OutcomingWebSocketMessage = OutcomingDataType
 
-export type OutcomingDataType = SendLoginMsg | SendJumpMsg | SendLogoutMsg | CreateFragmentMsg
+export type OutcomingDataType = SendLoginMsg | SendJumpMsg | SendLogoutMsg | SendCreateFragmentMsg | SendDeleteFragmentMsg
 
 export interface MapInfoMsg {
     access: Access
@@ -97,11 +100,23 @@ export interface FragmentMsg {
     status: boolean
 }
 
-export interface CreateFragmentMsg {
-    type: string,
+export interface ChangeFragmentsMsg {
+    status: boolean
+    fragment: Fragment[]
+}
+
+export interface SendCreateFragmentMsg {
+    type: string
     data: {
         name: string
         bounds: number[][]
+    }
+}
+
+export interface SendDeleteFragmentMsg {
+    type: string
+    data: {
+        name: string
     }
 }
 
@@ -128,6 +143,8 @@ export interface MapContentState {
     areaZone: AreaZone[]
     regionInfo: RegionInfo
     boxPoint: BoxPoint
+    statusBD: boolean
+    statusS: boolean
     tflight: Tflight[]
 }
 

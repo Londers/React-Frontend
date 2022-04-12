@@ -65,7 +65,9 @@ export const accountSlice = createSlice({
             })
         },
         setFragments: (state, action: PayloadAction<FragmentMsg>) => {
-            state.fragments = action.payload.fragment
+            if (action.payload.status) {
+                state.fragments = action.payload.fragment
+            }
         },
         clearLoginError: (state, action: PayloadAction<undefined>) => {
             state.status = false

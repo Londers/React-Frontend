@@ -14,9 +14,9 @@ import {
 } from "@mui/material";
 import {Button as YButton} from "react-yandex-maps";
 import {Visibility, VisibilityOff} from "@mui/icons-material";
-import {useAppDispatch, useAppSelector} from "../app/hooks";
-import {clearLoginError, selectAuthorized, selectError} from "../features/mapContainer/acccountSlice";
-import {wsSendMessage} from "./Middleware";
+import {useAppDispatch, useAppSelector} from "../../app/hooks";
+import {clearLoginError, selectAuthorized, selectError} from "../mapContainer/acccountSlice";
+import {wsSendMessage} from "../../common/Middleware";
 
 function LoginDialog(props: { width: string }) {
     const authorized = useAppSelector(selectAuthorized)
@@ -87,7 +87,6 @@ function LoginDialog(props: { width: string }) {
                             color="secondary"
                             required={true}
                             onChange={handleLoginChange}
-                            error={status as boolean}
                         />
                         <FormControl sx={{marginTop: '1vh'}} variant="outlined" color="secondary" required={true}>
                             <InputLabel htmlFor="outlined-adornment-password">Пароль</InputLabel>
@@ -97,7 +96,6 @@ function LoginDialog(props: { width: string }) {
                                 type={showPassword ? 'text' : 'password'}
                                 value={password}
                                 onChange={handlePasswordChange}
-                                error={status as boolean}
                                 endAdornment={
                                     <InputAdornment position="end">
                                         <IconButton

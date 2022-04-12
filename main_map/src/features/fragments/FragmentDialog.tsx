@@ -11,9 +11,9 @@ import {
     Select,
     SelectChangeEvent
 } from "@mui/material";
-import {useAppSelector} from "../app/hooks";
-import {selectFragments} from "../features/mapContainer/acccountSlice";
-import {MapContext} from "../features/mapContainer/MapContainer";
+import {useAppSelector} from "../../app/hooks";
+import {selectFragments} from "../mapContainer/acccountSlice";
+import {MapContext} from "../mapContainer/MapContainer";
 
 function FragmentDialog(props: { open: boolean, setOpen: Function }) {
     const [open, setOpen] = [props.open, props.setOpen]
