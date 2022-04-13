@@ -2,12 +2,16 @@ import React, {useState} from "react";
 import {Button, YMapsApi} from "react-yandex-maps";
 import './SideButtons.sass'
 import AreaDialog from "../../../common/AreaDialog";
+import {useAppSelector} from "../../../app/hooks";
+import {selectCirclesLength} from "../mapContentSlice";
 
 const indent = 25
 
 function SideButtons(props: { ymaps: YMapsApi | null, width: string }) {
     const [openDialog, setOpenDialog] = useState<boolean>(false)
     const [callerPath, setCallerPath] = useState<string>("")
+
+    const circlesLength = useAppSelector(selectCirclesLength)
 
     const techArmButton = () => {
         setCallerPath("/techArm")
@@ -69,6 +73,23 @@ function SideButtons(props: { ymaps: YMapsApi | null, width: string }) {
                 )
             }
             <AreaDialog open={openDialog} setOpen={setOpenMiddleware} showAreas={false}/>
+            {circlesLength > 0 &&
+                <Button
+                    options={{
+                        maxWidth: props.width,
+                        selectOnClick: false,
+                        float: "none",
+                        position: {bottom: "2.5rem", left: ".5rem"},
+                        layout: props.ymaps?.templateLayoutFactory.createClass(
+                            `<div class="ymaps-float-button ymaps-hidden-icon">
+                                        <span class="ymaps-button-text">{{ data.content }}</span> 
+                                    </div>`
+                        ),
+                    }}
+                    data={{content: `Выбрано перекрёстков: ${circlesLength}`}}
+                    defaultState={{selected: false}}
+                />
+            }
         </>
     )
 }

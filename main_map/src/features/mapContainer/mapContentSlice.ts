@@ -1,4 +1,12 @@
-import {CheckConnMsg, JumpMsg, MapContentState, MapInfoMsg, RepaintMsg, TflightMsg} from "../../common";
+import {
+    CheckConnMsg,
+    Circle,
+    JumpMsg,
+    MapContentState,
+    MapInfoMsg,
+    RepaintMsg,
+    TflightMsg
+} from "../../common";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {RootState} from "../../app/store";
 
@@ -8,6 +16,8 @@ const initialState: MapContentState = {
     areaZone: [],
     statusS: true,
     statusBD: true,
+    multipleCrossSelect: false,
+    circles: [],
     boxPoint: {point0: {Y: 53, X: 44}, point1: {Y: 55, X: 46}},
     tflight: []
 }
@@ -34,6 +44,22 @@ export const mapContentSlice = createSlice({
             if (action.payload.statusS !== undefined) state.statusS = action.payload.statusS
             if (action.payload.statusBD !== undefined) state.statusBD = action.payload.statusBD
         },
+        switchMultipleCrossSelect: (state) => {
+            state.multipleCrossSelect = !state.multipleCrossSelect
+            if (!state.multipleCrossSelect) state.circles = []
+        },
+        addCircle: (state, action: PayloadAction<Circle>) => {
+            if (state.circles.length < 6) state.circles.push(action.payload)
+        },
+        deleteCircle: (state, action: PayloadAction<Circle>) => {
+            const index = state.circles.findIndex((circle) =>
+                circle.coords.every((coord, index) => coord === action.payload.coords[index])
+            )
+            state.circles.splice(index, 1)
+        },
+        clearCircles: (state) => {
+            state.circles = []
+        },
         setTFLights: (state, action: PayloadAction<TflightMsg>) => {
             action.payload.tflight.forEach(updatedTfl => {
                 const index = state.tflight.findIndex((oldTfl) =>
@@ -49,8 +75,21 @@ export const mapContentSlice = createSlice({
     }
 })
 
-export const {setInitialData, setBoxPoint, setRepaint, setStatus, setTFLights} = mapContentSlice.actions
+export const {
+    setInitialData,
+    setBoxPoint,
+    setRepaint,
+    setStatus,
+    switchMultipleCrossSelect,
+    addCircle,
+    deleteCircle,
+    clearCircles,
+    setTFLights
+} = mapContentSlice.actions
 
 export const selectTFLights = (state: RootState) => state.mapContent.tflight
+export const selectMultipleCrossSelect = (state: RootState) => state.mapContent.multipleCrossSelect
+export const selectCircles = (state: RootState) => state.mapContent.circles
+export const selectCirclesLength = (state: RootState) => state.mapContent.circles.length
 
 export default mapContentSlice.reducer

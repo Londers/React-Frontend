@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import {selectFragments} from "../mapContainer/acccountSlice";
-import {wsSendMessage} from "../../common/Middleware";
+import {wsSendMessage} from "../../common/Middlewares/WebSocketMiddleware";
 
 function DeleteFragmentDialog(props: { open: boolean, setOpen: Function }) {
     const [open, setOpen] = [props.open, props.setOpen]

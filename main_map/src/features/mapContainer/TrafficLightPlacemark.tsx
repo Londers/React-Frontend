@@ -1,9 +1,14 @@
 import React, {useCallback, useMemo} from "react";
 import {Tflight} from "../../common";
 import {Placemark, YMapsApi} from "react-yandex-maps";
+import {useAppDispatch, useAppSelector} from "../../app/hooks";
+import {selectAuthorized} from "./acccountSlice";
+import {handleTFLightClick} from "../../common/Middlewares/TrafficLightsMiddleware";
 
 function TrafficLightPlacemark(props: { trafficLight: Tflight, ymaps: YMapsApi | null }) {
     const trafficLight = props.trafficLight
+
+    const dispatch = useAppDispatch()
 
     const getImage = (sost: number) => {
         if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
@@ -78,23 +83,22 @@ function TrafficLightPlacemark(props: { trafficLight: Tflight, ymaps: YMapsApi |
             default:
                 return 25;
         }
-    };
+    }
 
     const memoizedPlacemark = useMemo(
-        () =>
-            <Placemark key={trafficLight.idevice}
-                       properties={{
-                           hintContent: `${trafficLight.description}<br>${trafficLight.tlsost.description}<br>` +
-                               `[${trafficLight.area.num}, ${trafficLight.subarea}, ${trafficLight.ID}, ${trafficLight.idevice}]`
-                       }}
-                       options={{
-                           iconLayout: createChipsLayout(calculate, trafficLight.tlsost.num)
-                       }}
-                       geometry={[trafficLight.points.Y, trafficLight.points.X]}
-                       modules={['geoObject.addon.hint']}
-                       onClick={() => console.log(trafficLight)}
-            />,
-        [createChipsLayout, trafficLight]
+        () => <Placemark key={trafficLight.idevice}
+                         properties={{
+                             hintContent: `${trafficLight.description}<br>${trafficLight.tlsost.description}<br>` +
+                                 `[${trafficLight.area.num}, ${trafficLight.subarea}, ${trafficLight.ID}, ${trafficLight.idevice}]`
+                         }}
+                         options={{
+                             iconLayout: createChipsLayout(calculate, trafficLight.tlsost.num)
+                         }}
+                         geometry={[trafficLight.points.Y, trafficLight.points.X]}
+                         modules={['geoObject.addon.hint']}
+                         onClick={() => dispatch(handleTFLightClick(trafficLight))}
+        />,
+        [createChipsLayout, dispatch, trafficLight]
     )
 
     return (

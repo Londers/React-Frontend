@@ -3,7 +3,7 @@ import './App.sass';
 import MapContainer from "../features/mapContainer/MapContainer";
 import MapAppBar from "../features/mapAppBar/MapAppBar";
 import {useAppDispatch} from "./hooks";
-import {wsConnect} from "../common/Middleware";
+import {wsConnect} from "../common/Middlewares/WebSocketMiddleware";
 
 function App() {
     const dispatch = useAppDispatch()

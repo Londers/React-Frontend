@@ -11,6 +11,7 @@ import {
     FullscreenControl,
     YMapsApi,
     ListBoxItem,
+    Circle,
 } from 'react-yandex-maps';
 import {Grid} from "@mui/material";
 import SideButtons from "./mapButtons/SideButtons";
@@ -19,7 +20,7 @@ import {useAppSelector} from "../../app/hooks";
 import {selectAuthorized} from "./acccountSlice";
 import LoginDialog from "../login/LoginDialog";
 import TrafficLightPlacemark from "./TrafficLightPlacemark";
-import {selectTFLights} from "./mapContentSlice";
+import {selectCircles, selectTFLights} from "./mapContentSlice";
 
 export const MapContext = createContext<any | undefined>(undefined);
 
@@ -45,6 +46,7 @@ function MapContainer() {
     }, [bounds, boxPoint])
 
     const trafficLights = useAppSelector(selectTFLights)
+    const circles = useAppSelector(selectCircles)
 
     const width = "200"
 
@@ -103,6 +105,36 @@ function MapContainer() {
                     }
                     {trafficLights?.map(trafficLight =>
                         <TrafficLightPlacemark key={trafficLight.idevice} trafficLight={trafficLight} ymaps={ymaps}/>
+                    )}
+                    {circles?.map((circle, index) =>
+                        <Circle
+                            key={index}
+                            geometry={
+                                Object.values(
+                                    {
+                                        // The coordinates of the center of the circle.
+                                        coordinates: circle.coords,
+                                        // The radius of the circle in meters.
+                                        radius: 10000,
+                                    }
+                                )
+                            }
+                            options={{
+                                // Setting the circle options.
+                                // Enabling drag-n-drop for the circle.
+                                draggable: false,
+                                // Fill color. The last byte (77) defines transparency.
+                                // The transparency of the fill can also be set using
+                                // the option "fillOpacity".
+                                fillColor: '#DB709377',
+                                // Stroke color.
+                                strokeColor: '#990066',
+                                // Stroke transparency.
+                                strokeOpacity: 0.8,
+                                // The width of the stroke in pixels.
+                                strokeWidth: 5,
+                            }}
+                        />
                     )}
                 </Map>
             </YMaps>

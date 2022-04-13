@@ -16,7 +16,7 @@ import {Button as YButton} from "react-yandex-maps";
 import {Visibility, VisibilityOff} from "@mui/icons-material";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import {clearLoginError, selectAuthorized, selectError} from "../mapContainer/acccountSlice";
-import {wsSendMessage} from "../../common/Middleware";
+import {wsSendMessage} from "../../common/Middlewares/WebSocketMiddleware";
 
 function LoginDialog(props: { width: string }) {
     const authorized = useAppSelector(selectAuthorized)

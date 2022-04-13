@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import {selectFragments} from "../mapContainer/acccountSlice";
-import {wsSendMessage} from "../../common/Middleware";
+import {wsSendMessage} from "../../common/Middlewares/WebSocketMiddleware";
 import {MapContext} from "../mapContainer/MapContainer";
 
 function CreateFragmentDialog(props: { open: boolean, setOpen: Function }) {

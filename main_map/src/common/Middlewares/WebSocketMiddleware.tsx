@@ -5,16 +5,16 @@ import {
     MapInfoMsg,
     TflightMsg,
     IncomingWebSocketMessage,
-    OutcomingWebSocketMessage, JumpMsg, RepaintMsg, ChangeFragmentsMsg, CheckConnMsg
-} from "./index";
-import {fillAccountData, setLogouted, setLogged, setFragments} from "../features/mapContainer/acccountSlice";
+    OutcomingWebSocketMessage, JumpMsg, RepaintMsg, ChangeFragmentsMsg, CheckConnMsg,
+} from "../index";
+import {fillAccountData, setLogouted, setLogged, setFragments} from "../../features/mapContainer/acccountSlice";
 import {
     setBoxPoint,
     setInitialData,
     setRepaint,
     setStatus,
     setTFLights
-} from "../features/mapContainer/mapContentSlice";
+} from "../../features/mapContainer/mapContentSlice";
 
 export const wsConnect = createAction<string>("websocket/connect")
 export const wsGetMessage = createAction<IncomingWebSocketMessage>('websocket/message')

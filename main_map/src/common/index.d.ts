@@ -1,5 +1,3 @@
-import {bottomNavigationActionClasses} from "@mui/material";
-
 export interface IncomingWebSocketMessage {
     type: string
     data: IncomingDataType
@@ -145,7 +143,14 @@ export interface MapContentState {
     boxPoint: BoxPoint
     statusBD: boolean
     statusS: boolean
+    multipleCrossSelect: boolean
+    circles: Circle[]
     tflight: Tflight[]
+}
+
+export interface Circle {
+    coords: number[]
+    position: Pos
 }
 
 export interface Tflight {
