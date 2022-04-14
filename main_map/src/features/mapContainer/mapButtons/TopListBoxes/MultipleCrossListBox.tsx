@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import {ListBox, ListBoxItem} from "react-yandex-maps";
 import {clearCircles, selectCircles, selectMultipleCrossSelect, switchMultipleCrossSelect} from "../../mapContentSlice";
 import {useAppDispatch, useAppSelector} from "../../../../app/hooks";
+import {openTab} from "../SideButtons";
 
 function MultipleCrossListBox() {
     const [expandMultipleSelect, setExpandMultipleSelect] = useState<boolean>(false)
@@ -20,6 +21,7 @@ function MultipleCrossListBox() {
         if (circles.length !== 0) {
             localStorage.setItem("multipleCross", JSON.stringify(circles.map(circle => circle.position)))
             dispatch(switchMultipleCrossSelect())
+            openTab("/multipleCross")
         }
     }
 

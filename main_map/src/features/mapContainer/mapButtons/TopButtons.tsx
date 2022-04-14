@@ -38,7 +38,6 @@ function TopButtons(props: { ymaps: YMapsApi | null, width: string }) {
         setOpenCreateFragmentDialog(open)
     }
 
-
     const noSelectItemLayout = props.ymaps?.templateLayoutFactory.createClass(
         "<div class='listbox__list-item listbox__list-item-text'>{{data.content}}</div>"
     )
@@ -83,7 +82,7 @@ function TopButtons(props: { ymaps: YMapsApi | null, width: string }) {
                     defaultState={{selected: false}}
                 />
                 <HelpListBox layout={noSelectItemLayout} />
-                <AdministrationListBox layout={noSelectItemLayout} />
+                <AdministrationListBox width={props.width} layout={noSelectItemLayout} />
                 <SettingsListBox layout={noSelectItemLayout} startFragmentCreating={startFragmentCreating} />
             </>
 

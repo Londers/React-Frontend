@@ -1,9 +1,9 @@
 import React, {useCallback, useMemo} from "react";
-import {Tflight} from "../../common";
+import {Tflight} from "../../../common";
 import {Placemark, YMapsApi} from "react-yandex-maps";
-import {useAppDispatch, useAppSelector} from "../../app/hooks";
-import {selectAuthorized} from "./acccountSlice";
-import {handleTFLightClick} from "../../common/Middlewares/TrafficLightsMiddleware";
+import {useAppDispatch, useAppSelector} from "../../../app/hooks";
+import {selectAuthorized} from "../acccountSlice";
+import {handleTFLightClick} from "../../../common/Middlewares/TrafficLightsMiddleware";
 
 function TrafficLightPlacemark(props: { trafficLight: Tflight, ymaps: YMapsApi | null }) {
     const trafficLight = props.trafficLight

@@ -18,13 +18,15 @@ import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import {clearLoginError, selectAuthorized, selectError} from "../mapContainer/acccountSlice";
 import {wsSendMessage} from "../../common/Middlewares/WebSocketMiddleware";
 
-function LoginDialog(props: { width: string }) {
+function LoginDialog(props: { width: string, change?: boolean }) {
     const authorized = useAppSelector(selectAuthorized)
-    const [open, setOpen] = useState(false)
+    const [status, message] = useAppSelector(selectError)
+
+    const [open, setOpen] = useState(props.change ?? false)
     const [showPassword, setShowPassword] = useState<boolean>(false)
     const [password, setPassword] = useState<string>('')
     const [login, setLogin] = useState<string>('')
-    const [status, message] = useAppSelector(selectError)
+
     const dispatch = useAppDispatch()
 
     const handleOpen = () => {
@@ -32,6 +34,7 @@ function LoginDialog(props: { width: string }) {
         setPassword("")
         setOpen(true)
     }
+
     const handleClose = () => {
         if (status) dispatch(clearLoginError())
         setOpen(false)
@@ -39,10 +42,10 @@ function LoginDialog(props: { width: string }) {
 
     const handleSubmit = () => {
         if (status) dispatch(clearLoginError())
-        dispatch(wsSendMessage({type: "login", login, password}))
+        dispatch(wsSendMessage({type: props.change ? "changeAcc" : "login", login, password}))
     }
 
-    const onKeyDownHandler = (e: React.KeyboardEvent) => {
+    const handleKeyDownHandler = (e: React.KeyboardEvent) => {
         if (e.key === "Enter") handleSubmit()
     }
 
@@ -71,8 +74,8 @@ function LoginDialog(props: { width: string }) {
                     defaultState={{selected: false}}
                     onClick={handleOpen}/>
             }
-            <Dialog open={open} onClose={handleClose} onKeyDown={onKeyDownHandler}>
-                <DialogTitle>Авторизация</DialogTitle>
+            <Dialog open={open} onClose={handleClose} onKeyDown={handleKeyDownHandler}>
+                <DialogTitle>{props.change ? "Смена аккаунта" : "Авторизация"}</DialogTitle>
                 <DialogContent>
                     <form style={{display: "grid"}}>
                         <TextField

@@ -5,6 +5,9 @@ import AreaDialog from "../../../common/AreaDialog";
 import {useAppSelector} from "../../../app/hooks";
 import {selectCirclesLength} from "../mapContentSlice";
 
+export const openTab = (path: string) => {
+    window.open(window.location.origin + "/user/" + localStorage.getItem("login") + path)
+}
 const indent = 25
 
 function SideButtons(props: { ymaps: YMapsApi | null, width: string }) {
@@ -16,9 +19,6 @@ function SideButtons(props: { ymaps: YMapsApi | null, width: string }) {
     const techArmButton = () => {
         setCallerPath("/techArm")
         setOpenDialog(true)
-    }
-    const openTab = (path: string) => {
-        window.open(window.location.origin + "/user/" + localStorage.getItem("login") + path)
     }
     const alarmButton = () => {
         setCallerPath("/alarm")
