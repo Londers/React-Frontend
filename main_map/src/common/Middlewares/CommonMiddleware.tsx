@@ -1,13 +1,15 @@
 import {createAction, createListenerMiddleware, isAnyOf} from "@reduxjs/toolkit";
-import {Tflight} from "../index";
+import {SendChangePasswordMsg, Tflight} from "../index";
 import {RootState} from "../../app/store";
 import {addCircle, deleteCircle} from "../../features/mapContainer/mapContentSlice";
+import axios from "axios";
 
 export const handleTFLightClick = createAction<Tflight>("trafficLights/click")
-export const TrafficLightsMiddleware = createListenerMiddleware()
+export const handleChangePassword = createAction<SendChangePasswordMsg>("fetch/changePassword")
+export const CommonMiddleware = createListenerMiddleware()
 
-TrafficLightsMiddleware.startListening({
-    matcher: isAnyOf(handleTFLightClick),
+CommonMiddleware.startListening({
+    matcher: isAnyOf(handleTFLightClick, handleChangePassword),
     effect: async (action, listenerApi) => {
         if (handleTFLightClick.match(action)) {
             const state = listenerApi.getState() as RootState
@@ -24,6 +26,17 @@ TrafficLightsMiddleware.startListening({
                     console.log("cross")
                 }
             }
+        } else if (handleChangePassword.match(action)) {
+            const state = listenerApi.getState() as RootState
+            axios.post(
+                `${window.location.origin}/user/${state.account.login}/manage/changepw`,
+                action.payload,
+            ).then((response) => {
+                window.alert("Пароль успешно изменён. Пожалуйста, войдите в аккаунт снова.")
+                console.log("success", response)
+            }).catch((error) => {
+                window.alert(error.message)
+            })
         }
     },
 })

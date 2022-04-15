@@ -3,7 +3,7 @@ import {Tflight} from "../../../common";
 import {Placemark, YMapsApi} from "react-yandex-maps";
 import {useAppDispatch, useAppSelector} from "../../../app/hooks";
 import {selectAuthorized} from "../acccountSlice";
-import {handleTFLightClick} from "../../../common/Middlewares/TrafficLightsMiddleware";
+import {handleTFLightClick} from "../../../common/Middlewares/CommonMiddleware";
 
 function TrafficLightPlacemark(props: { trafficLight: Tflight, ymaps: YMapsApi | null }) {
     const trafficLight = props.trafficLight

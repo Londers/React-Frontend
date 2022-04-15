@@ -18,7 +18,12 @@ export type IncomingDataType =
 
 export type OutcomingWebSocketMessage = OutcomingDataType
 
-export type OutcomingDataType = SendLoginMsg | SendJumpMsg | SendLogoutMsg | SendCreateFragmentMsg | SendDeleteFragmentMsg
+export type OutcomingDataType =
+    SendLoginMsg
+    | SendJumpMsg
+    | SendLogoutMsg
+    | SendCreateFragmentMsg
+    | SendDeleteFragmentMsg
 
 export interface MapInfoMsg {
     access: Access
@@ -86,6 +91,22 @@ export interface LogoutMsg {
 
 export interface SendLogoutMsg {
     type: string
+}
+
+export interface SendChangePasswordMsg {
+    newPW: string
+    oldPW: string
+}
+
+export interface GetLicenseRequest {
+    address: string
+    license: string
+    message: string
+    name: string
+    numAcc: number
+    numDev: number
+    phone: string
+    timeEnd: string
 }
 
 export interface CheckConnMsg {

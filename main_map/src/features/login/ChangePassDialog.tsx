@@ -12,18 +12,24 @@ import {
     OutlinedInput
 } from "@mui/material";
 import {Visibility, VisibilityOff} from "@mui/icons-material";
+import {useAppDispatch} from "../../app/hooks";
+import {handleChangePassword} from "../../common/Middlewares/CommonMiddleware";
 
-function ChangePassDialog() {
+function ChangePassDialog(props: {handleClose: Function}) {
     const [open, setOpen] = useState<boolean>(true)
 
     const [showPassword, setShowPassword] = useState<boolean>(false)
 
+    // const [oldPassFocus, setOldPassFocus] = useState<boolean>(true);
+    const [blurred, setBlurred] = useState<boolean>(false)
     const [oldPass, setOldPass] = useState<string>("");
     const [newPass, setNewPass] = useState<string>("");
     const [repeatPass, setRepeatPass] = useState<string>("");
 
     const [compareError, setCompareError] = useState<boolean>(false)
     const [lengthError, setLengthError] = useState<boolean>(false)
+
+    const dispatch = useAppDispatch()
 
     const handleKeyDownHandler = (e: React.KeyboardEvent) => {
         if (e.key === "Enter") handleSubmit()
@@ -54,11 +60,14 @@ function ChangePassDialog() {
     const handleSubmit = () => {
         if (oldPass.length !== 0 && !lengthError && !compareError) {
             setOpen(false)
+            props.handleClose()
+            dispatch(handleChangePassword({newPW: newPass, oldPW: oldPass}))
         }
     }
 
     const handleClose = () => {
         setOpen(false)
+        props.handleClose()
     }
 
     return (
@@ -72,9 +81,11 @@ function ChangePassDialog() {
                             <OutlinedInput
                                 id="outlined-adornment-password"
                                 autoComplete="current-password"
+                                autoFocus={true}
                                 type={showPassword ? "text" : "password"}
                                 value={oldPass}
                                 onChange={handleOldPassChange}
+                                onBlur={() => setBlurred(true)}
                                 endAdornment={
                                     <InputAdornment position="end">
                                         <IconButton
@@ -137,7 +148,7 @@ function ChangePassDialog() {
                             />
                         </FormControl>
                         {/*<p hidden={!status} style={{color: "red"}}>{message ?? ""}</p>*/}
-                        {(oldPass.length === 0) ?
+                        {((oldPass.length === 0) && blurred) ?
                             <p style={{color: "red"}}>Введите текущий пароль</p> :
                             (lengthError ?
                                     <p style={{color: "red"}}>Слишком короткий пароль</p> :

@@ -6,6 +6,7 @@ import {wsSendMessage} from "../../../../common/Middlewares/WebSocketMiddleware"
 import {useAppDispatch} from "../../../../app/hooks";
 
 function MapManagementListBox(props: { layout: any }) {
+    const [expanded, setExpanded] = useState<boolean>(false)
     const [openAreaDialog, setOpenAreaDialog] = useState<boolean>(false)
     const [openFragmentsDialog, setOpenFragmentsDialog] = useState<boolean>(false)
 
@@ -13,10 +14,12 @@ function MapManagementListBox(props: { layout: any }) {
 
     const handleJump = () => {
         setOpenAreaDialog(true)
+        setExpanded(false)
     }
 
     const handleFragments = () => {
         setOpenFragmentsDialog(true)
+        setExpanded(false)
     }
 
     const setOpenAreaMiddleware = (open: boolean, region: string, area: string[]) => {
@@ -28,9 +31,13 @@ function MapManagementListBox(props: { layout: any }) {
     return (
         <>
             <ListBox data={{content: "Управление картой"}}
-                     options={{floatIndex: 6, itemLayout: props.layout}}>
-                <ListBoxItem options={{selectOnClick: false}} data={{content: "Перемещение"}} onClick={handleJump}/>
-                <ListBoxItem options={{selectOnClick: false}} data={{content: "Фрагменты"}}
+                     options={{floatIndex: 6, itemLayout: props.layout}}
+                     state={{expanded}}>
+                <ListBoxItem options={{selectOnClick: false}}
+                             data={{content: "Перемещение"}}
+                             onClick={handleJump}/>
+                <ListBoxItem options={{selectOnClick: false}}
+                             data={{content: "Фрагменты"}}
                              onClick={handleFragments}/>
                 {/*<ListBoxItem options={{selectOnClick: false}} data={{content: "Зафиксировать экран"}}/>*/}
                 {/*<ListBoxItem options={{selectOnClick: false}} data={{content: "Снять фиксацию"}}/>*/}

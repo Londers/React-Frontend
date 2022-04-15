@@ -38,16 +38,16 @@ function MapAppBar() {
                             <img src="https://192.168.115.134:4443/free/resources/fullLogo.svg" alt="logo"/> :
                             <img src={window.location.origin + "/free/resources/fullLogo.svg"} alt="logo"/>
                     }
-                    <Typography variant="h6">
+                    <Typography variant="h6" sx={{userSelect: "none"}}>
                         {region}
                     </Typography>
-                    <Typography variant="h6">
+                    <Typography variant="h6" sx={{userSelect: "none"}}>
                         АРМ
                         {
                             description === "" ? "" : " дежурного - " + description
                         }
                     </Typography>
-                    <Typography variant="h6">
+                    <Typography variant="h6" sx={{userSelect: "none"}}>
                         {login}
                     </Typography>
                 </Grid>

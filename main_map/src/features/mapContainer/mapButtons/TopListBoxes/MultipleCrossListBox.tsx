@@ -5,7 +5,7 @@ import {useAppDispatch, useAppSelector} from "../../../../app/hooks";
 import {openTab} from "../SideButtons";
 
 function MultipleCrossListBox() {
-    const [expandMultipleSelect, setExpandMultipleSelect] = useState<boolean>(false)
+    const [expanded, setExpanded] = useState<boolean>(false)
 
     const dispatch = useAppDispatch()
 
@@ -14,7 +14,7 @@ function MultipleCrossListBox() {
 
     const handleMultipleCrossClick = () => {
         dispatch(switchMultipleCrossSelect())
-        setExpandMultipleSelect(false)
+        setExpanded(false)
     }
 
     const handleOpenMultipleCrossClick = () => {
@@ -32,7 +32,7 @@ function MultipleCrossListBox() {
     return (
         <ListBox data={{content: "Просмотр перекрёстков"}}
                  options={{floatIndex: 4}}
-                 state={{expanded: expandMultipleSelect}}>
+                 state={{expanded}}>
             <ListBoxItem options={{selectOnClick: false}}
                          state={{selected: multipleCrossSelect}}
                          data={{content: "Активировать выбор перекрёстков"}}

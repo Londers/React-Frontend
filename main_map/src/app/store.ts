@@ -1,7 +1,7 @@
 import {configureStore} from '@reduxjs/toolkit'
 import {accountSlice} from "../features/mapContainer/acccountSlice";
 import {WebSocketListenerMiddleware} from "../common/Middlewares/WebSocketMiddleware";
-import {TrafficLightsMiddleware} from "../common/Middlewares/TrafficLightsMiddleware";
+import {CommonMiddleware} from "../common/Middlewares/CommonMiddleware";
 import {mapContentSlice} from "../features/mapContainer/mapContentSlice";
 
 export const store = configureStore({
@@ -11,7 +11,7 @@ export const store = configureStore({
         // regions: regionsReducer,
         mapContent: mapContentSlice.reducer,
     },
-    middleware: getDefaultMiddleware => getDefaultMiddleware().prepend(WebSocketListenerMiddleware.middleware).concat(TrafficLightsMiddleware.middleware),
+    middleware: getDefaultMiddleware => getDefaultMiddleware().prepend(WebSocketListenerMiddleware.middleware).concat(CommonMiddleware.middleware),
     // middleware: getDefaultMiddleware => getDefaultMiddleware().prepend(
     //     untypedMiddleware as Middleware<
     //         (action: Action<'specialAction'>) => number,
