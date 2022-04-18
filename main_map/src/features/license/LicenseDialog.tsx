@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useEffect, useState} from "react";
+import React, {ChangeEvent, useCallback, useEffect, useState} from "react";
 import {
     Button,
     Dialog,
@@ -25,22 +25,31 @@ function LicenseDialog(props: { handleClose: Function }) {
     })
 
     useEffect(() => {
-        axios.get(window.location.origin + '/user/' + localStorage.getItem('login') + '/license')
+        axios.post(window.location.origin + '/user/' + localStorage.getItem('login') + '/license')
             .then((response: AxiosResponse<GetLicenseRequest>) => {
                 setLicenseInfo(response.data)
             })
             .catch((error) => {
                 window.alert(error.message)
             })
-    })
+    }, [])
 
-    const formatTime = (time: string) => new Date(time).toLocaleString('ru-RU', {timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone});
+    const formatTime = (time: string) => new Date(time).toLocaleString('ru-RU', {timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone})
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setNewLicense(e.currentTarget.value)
     }
 
     const handleSubmit = () => {
+        axios.post(window.location.origin + '/user/' + localStorage.getItem('login') + '/license/newToken',
+            {keyStr: newLicense})
+            .then((response: AxiosResponse<GetLicenseRequest>) => {
+                setLicenseInfo(response.data)
+            })
+            .catch((error) => {
+                window.alert(error.message)
+                window.alert(error.data)
+            })
         setOpen(false)
         props.handleClose()
     }

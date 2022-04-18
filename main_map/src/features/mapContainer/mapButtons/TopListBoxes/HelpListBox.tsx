@@ -16,13 +16,19 @@ function HelpListBox(props: { layout: any }) {
         setExpanded(false)
     }
 
+    const hadnleInstructionClick = () => {
+        window.open("/free/resources/АСУДД Микро-М_АРМ_2022.pdf", '_blank')
+        setExpanded(false)
+    }
+
     return (
         <>
             <ListBox data={{content: "Помощь"}}
                      options={{float: "right", floatIndex: 2, itemLayout: props.layout}}
                      state={{expanded}}>
                 <ListBoxItem options={{selectOnClick: false}}
-                             data={{content: "Инструкция"}}/>
+                             data={{content: "Инструкция"}}
+                             onClick={hadnleInstructionClick}/>
                 <ListBoxItem options={{selectOnClick: false}}
                              data={{content: "О производителе"}}
                              onClick={handleAboutModalClick}/>

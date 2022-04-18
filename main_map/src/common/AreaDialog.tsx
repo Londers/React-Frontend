@@ -44,7 +44,7 @@ function AreaDialog(props: { open: boolean, setOpen: Function, showAreas: boolea
         return (userAreas.find(([userRegionName]) => userRegionName === regionName) ?? ['', {}])[1]
     }
 
-    const [regionNum, setRegionNum] = useState(userRegion[0][0]);
+    const [regionNum, setRegionNum] = useState(userRegion.length === 0 ? "-1" : userRegion[0][0]);
     const [area, setArea] = useState<Area>(getArea(regionNum))
     const [selectedAreas, setSelectedAreas] = useState<string[]>([]);
 
