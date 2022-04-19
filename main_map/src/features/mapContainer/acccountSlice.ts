@@ -21,6 +21,12 @@ const initialState: AccountState = {
     message: undefined
 }
 
+// debug
+if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
+    initialState.authorizedFlag = false
+    initialState.login = ""
+}
+
 export const accountSlice = createSlice({
     name: "account",
     initialState,
@@ -81,6 +87,7 @@ export const {fillAccountData, setLogged, setLogouted, setFragments, clearLoginE
 // Other code such as selectors can use the imported `RootState` type
 export const selectAccess = (state: RootState) => state.account.access
 export const selectAuthorized = (state: RootState) => state.account.authorizedFlag
+export const selectLicense = (state: RootState) => state.account.license
 export const selectFragments = (state: RootState) => state.account.fragments ?? []
 export const selectRegionDesc = (state: RootState) =>
         state.account.region === "*" ?

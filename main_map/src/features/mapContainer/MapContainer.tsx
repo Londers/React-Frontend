@@ -21,6 +21,9 @@ import LoginDialog from "../login/LoginDialog";
 import TrafficLightPlacemark from "./mapObjects/TrafficLightPlacemark";
 import {selectCircles, selectTFLights} from "./mapContentSlice";
 import CustomCircle from "./mapObjects/CustomCircle";
+import AboutModal from "../about/AboutModal";
+import AreasLayout from "./mapObjects/AreasLayout";
+import SubareasLayout from "./mapObjects/SubareasLayout";
 
 export const MapContext = createContext<any | undefined>(undefined);
 
@@ -48,6 +51,9 @@ function MapContainer() {
 
     const trafficLights = useAppSelector(selectTFLights)
     const circles = useAppSelector(selectCircles)
+
+    const [showAreas, setShowAreas] = useState<boolean>(false)
+    const [showSubareas, setShowSubareas] = useState<boolean>(false)
 
     const width = "200"
 
@@ -88,8 +94,18 @@ function MapContainer() {
                     <TypeSelector options={{float: 'right'}}>
                         {authorized &&
                             <>
-                                <ListBoxItem data={{content: "Районы"}}/>
-                                <ListBoxItem data={{content: "Подрайоны"}}/>
+                                <ListBoxItem
+                                    options={{selectOnClick: false}}
+                                    state={{selected: showAreas}}
+                                    data={{content: "Районы"}}
+                                    onClick={() => setShowAreas(!showAreas)}
+                                />
+                                <ListBoxItem
+                                    options={{selectOnClick: false}}
+                                    state={{selected: showSubareas}}
+                                    data={{content: "Подрайоны"}}
+                                    onClick={() => setShowSubareas(!showSubareas)}
+                                />
                                 <ListBoxItem data={{content: "Камеры"}}/>
                                 <ListBoxItem data={{content: "Направления"}}/>
                                 <ListBoxItem data={{content: "Трекер"}}/>
@@ -103,6 +119,7 @@ function MapContainer() {
                         <MapContext.Provider value={mapRef.current}>
                             <TopButtons ymaps={ymaps} width={width}/>
                             <SideButtons ymaps={ymaps} width={width}/>
+                            <AboutModal close={true} />
                         </MapContext.Provider>
                         :
                         <LoginDialog width={width}/>
@@ -111,6 +128,8 @@ function MapContainer() {
                         <TrafficLightPlacemark key={trafficLight.idevice} trafficLight={trafficLight}
                                                ymaps={ymaps}/>
                     )}
+                    {showAreas && <AreasLayout />}
+                    {showSubareas && <SubareasLayout />}
                     {circles?.map((circle, index) =>
                         <CustomCircle key={index} circle={circle} zoom={zoom}/>
                     )}

@@ -9,6 +9,7 @@ import {
 } from "../index";
 import {fillAccountData, setLogouted, setLogged, setFragments} from "../../features/mapContainer/acccountSlice";
 import {
+    setAreaZone,
     setBoxPoint,
     setInitialData,
     setRepaint,
@@ -50,6 +51,7 @@ WebSocketListenerMiddleware.startListening({
                     break;
                 case "login":
                     listenerApi.dispatch(setLogged(action.payload.data as LoginMsg))
+                    listenerApi.dispatch(setAreaZone(action.payload.data as LoginMsg))
                     break;
                 case "logOut":
                     listenerApi.dispatch(setLogouted(action.payload.data as LogoutMsg))

@@ -44,11 +44,10 @@ function LicenseDialog(props: { handleClose: Function }) {
         axios.post(window.location.origin + '/user/' + localStorage.getItem('login') + '/license/newToken',
             {keyStr: newLicense})
             .then((response: AxiosResponse<GetLicenseRequest>) => {
-                setLicenseInfo(response.data)
+                props.handleClose()
             })
             .catch((error) => {
-                window.alert(error.message)
-                window.alert(error.data)
+                window.alert(error.response.data.message)
             })
         setOpen(false)
         props.handleClose()

@@ -1,7 +1,7 @@
 import {
     CheckConnMsg,
     Circle,
-    JumpMsg,
+    JumpMsg, LoginMsg,
     MapContentState,
     MapInfoMsg,
     RepaintMsg,
@@ -35,6 +35,9 @@ export const mapContentSlice = createSlice({
         },
         setBoxPoint: (state, action: PayloadAction<JumpMsg>) => {
             state.boxPoint = action.payload.boxPoint
+        },
+        setAreaZone: (state, action: PayloadAction<LoginMsg>) => {
+            state.areaZone = action.payload.areaZone
         },
         setRepaint: (state, action: PayloadAction<RepaintMsg>) => {
             state.areaZone = action.payload.areaZone
@@ -78,6 +81,7 @@ export const mapContentSlice = createSlice({
 export const {
     setInitialData,
     setBoxPoint,
+    setAreaZone,
     setRepaint,
     setStatus,
     switchMultipleCrossSelect,
@@ -91,5 +95,6 @@ export const selectTFLights = (state: RootState) => state.mapContent.tflight
 export const selectMultipleCrossSelect = (state: RootState) => state.mapContent.multipleCrossSelect
 export const selectCircles = (state: RootState) => state.mapContent.circles
 export const selectCirclesLength = (state: RootState) => state.mapContent.circles.length
+export const selectAreaZone = (state: RootState) => state.mapContent.areaZone
 
 export default mapContentSlice.reducer

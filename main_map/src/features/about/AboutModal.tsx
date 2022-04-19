@@ -1,23 +1,23 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {Link, Modal, Zoom} from "@mui/material";
+import {useAppSelector} from "../../app/hooks";
+import {selectLicense} from "../mapContainer/acccountSlice";
 
-function AboutModal(props: { handleClose: Function }) {
-    const [open, setOpen] = React.useState(true);
-
-    const handleOpen = () => {
-        setOpen(true);
-    };
+function AboutModal(props: { handleClose?: Function, close?: boolean }) {
+    const [open, setOpen] = useState(true);
+    const license = useAppSelector(selectLicense)
 
     const handleClose = () => {
         setOpen(false);
-        props.handleClose()
+        if (props.handleClose) setTimeout(props.handleClose, 1000)
     };
+
+    useEffect(() => {
+        if (props.close) setTimeout(() => setOpen(false), 3000)
+    })
 
     return (
         <div>
-            <button type="button" onClick={handleOpen}>
-                open modal
-            </button>
             <Modal
                 style={{
                     display: "flex",
@@ -30,7 +30,7 @@ function AboutModal(props: { handleClose: Function }) {
                 // BackdropComponent={Backdrop}
                 // BackdropProps={{timeout: 500}}
             >
-                <Zoom in={open} style={{transitionDuration: "600ms", transitionTimingFunction: "ease"}}>
+                <Zoom in={open} style={{transitionDuration: "800ms", transitionTimingFunction: "ease"}}>
                     <div style={{
                         background: "transparent",
                         outline: "none",
@@ -40,24 +40,24 @@ function AboutModal(props: { handleClose: Function }) {
                         borderRadius: "10px",
                         position: "relative",
                         textAlign: "center",
-                        minWidth: "30vw",
-                        // width: "fit-content",
+                        margin: "0 35vw",
+                        width: "fit-content",
                         height: "fit-content",
                         wordWrap: "break-word",
                         padding: "15px",
                         lineHeight: "160%",
                     }}>
                         <p style={{marginTop: 0}}>АСУДД "Микро-М" <br/>
-                        Лицензия: S001D5000A5000 <br/>
-                        Версия: 1.00</p>
-                        <p style={{margin: "5vh 0", width: "30vw",}}>
+                            {(license !== "") && `Лицензия: ${license}`} <br/>
+                            Версия: 1.00</p>
+                        <p style={{margin: "5vh 1vw"}}>
                             Предназначена для упрощения процедур наблюдения,
                             управления и контроля за работой дорожных контроллеров и другого оборудования, работающего
                             в системе управления дорожным движением.</p>
                         <p>ООО "Автоматика-Д" <br/>
-                        644042 г. Омск, пр. Карла Маркса, д.18, корпус 28 <br/>
-                        тел./факс +7(3812)37-07-35, тел. +7(3812)39-49-10 <br/>
-                        E-mail: p51@inbox.ru</p>
+                            644042 г. Омск, пр. Карла Маркса, д.18, корпус 28 <br/>
+                            тел./факс +7(3812)37-07-35, тел. +7(3812)39-49-10 <br/>
+                            E-mail: p51@inbox.ru</p>
                         <Link href="http://asud55.ru/" target="_blank">http://asud55.ru/</Link>
                     </div>
                 </Zoom>
