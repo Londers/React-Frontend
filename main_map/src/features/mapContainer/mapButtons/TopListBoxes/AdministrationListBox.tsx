@@ -4,12 +4,17 @@ import {openTab} from "../SideButtons";
 import LoginDialog from "../../../login/LoginDialog";
 import ChangePassDialog from "../../../login/ChangePassDialog";
 import LicenseDialog from "../../../license/LicenseDialog";
+import {useAppSelector} from "../../../../app/hooks";
+import {selectAccess} from "../../acccountSlice";
 
 function AdministrationListBox(props: { width: string, layout: any }) {
     const [expanded, setExpanded] = useState<boolean>(false)
     const [showLoginDialog, setShowLoginDialog] = useState<boolean>(false)
     const [showChangePassDialog, setShowChangePassDialog] = useState<boolean>(false)
     const [showLicenseDialog, setShowLicenseDialog] = useState<boolean>(false)
+
+    const access = useAppSelector(selectAccess)
+    const manageAccess = access ? access[2] : false
 
     const handleChangeAccClick = () => {
         setShowLoginDialog(!showLoginDialog)
@@ -44,12 +49,16 @@ function AdministrationListBox(props: { width: string, layout: any }) {
                              data={{content: "Сменить пароль"}}
                              onClick={handleChangePassClick}
                 />
-                <ListBoxItem options={{selectOnClick: false}}
-                             data={{content: "Таблица данных операторов"}}
-                             onClick={handleManageClick}/>
+                {manageAccess &&
+                    <ListBoxItem options={{selectOnClick: false}}
+                                 data={{content: "Таблица данных операторов"}}
+                                 onClick={handleManageClick}
+                    />
+                }
                 <ListBoxItem options={{selectOnClick: false}}
                              data={{content: "Просмотр лицензии"}}
-                             onClick={handleLicenseClick}/>
+                             onClick={handleLicenseClick}
+                />
             </ListBox>
             {showLoginDialog && <LoginDialog width={props.width} change={true}/>}
             {showChangePassDialog && <ChangePassDialog handleClose={() => setShowChangePassDialog(false)}/>}

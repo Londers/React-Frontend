@@ -3,6 +3,7 @@ import {SendChangePasswordMsg, Tflight} from "../index";
 import {RootState} from "../../app/store";
 import {addCircle, deleteCircle} from "../../features/mapContainer/mapContentSlice";
 import axios from "axios";
+import {openTab} from "../../features/mapContainer/mapButtons/SideButtons";
 
 export const handleTFLightClick = createAction<Tflight>("trafficLights/click")
 export const handleChangePassword = createAction<SendChangePasswordMsg>("fetch/changePassword")
@@ -23,7 +24,8 @@ CommonMiddleware.startListening({
                         listenerApi.dispatch(addCircle({coords, position}))
                     }
                 } else {
-                    console.log("cross")
+                    const searchStr = 'Region=' + action.payload.region.num + '&Area=' + action.payload.area.num + '&ID=' + action.payload.ID
+                    openTab("/cross?" + searchStr)
                 }
             }
         } else if (handleChangePassword.match(action)) {

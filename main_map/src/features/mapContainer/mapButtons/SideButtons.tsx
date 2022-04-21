@@ -4,6 +4,7 @@ import './SideButtons.sass'
 import AreaDialog from "../../../common/AreaDialog";
 import {useAppSelector} from "../../../app/hooks";
 import {selectCirclesLength} from "../mapContentSlice";
+import {selectAccess} from "../acccountSlice";
 
 export const openTab = (path: string) => {
     window.open(window.location.origin + "/user/" + localStorage.getItem("login") + path)
@@ -16,6 +17,13 @@ function SideButtons(props: { ymaps: YMapsApi | null, width: string }) {
 
     const circlesLength = useAppSelector(selectCirclesLength)
 
+    const access = useAppSelector(selectAccess)
+    const deviceLogAccess = access ? access[5] : false
+    const techArmAccess = access ? access[7] : false
+    const greenStreetAccess = access ? access[8] : false
+    const charPointsAccess = access ? access[9] : false
+
+
     const techArmButton = () => {
         setCallerPath("/techArm")
         setOpenDialog(true)
@@ -26,14 +34,14 @@ function SideButtons(props: { ymaps: YMapsApi | null, width: string }) {
     }
 
     const buttonsNames = [
-        ["Сервер связи", techArmButton],
-        ["Журнал клиентов", () => openTab("/deviceLog")],
-        ["Журнал системы", () => openTab("/manage/serverLog")],
-        ["ДУ", () => openTab("/dispatchControl")],
-        ["Стандартные ЗУ", () => openTab("/greenStreet")],
-        ["Произвольные ЗУ", () => openTab("/arbitraryGS")],
-        ["Управление по хар. точкам", () => openTab("/charPoints")],
-        ["Предупреждения", alarmButton],
+        ["Сервер связи", techArmButton, techArmAccess],
+        ["Журнал клиентов", () => openTab("/deviceLog"), deviceLogAccess],
+        ["Журнал системы", () => openTab("/manage/serverLog"), true],
+        ["ДУ", () => openTab("/dispatchControl"), greenStreetAccess],
+        ["Стандартные ЗУ", () => openTab("/greenStreet"), greenStreetAccess],
+        ["Произвольные ЗУ", () => openTab("/arbitraryGS"), greenStreetAccess],
+        ["Управление по хар. точкам", () => openTab("/charPoints"), charPointsAccess],
+        ["Предупреждения", alarmButton, true],
     ]
 
     const setOpenMiddleware = (open: boolean, region: string, areas: string[]) => {
@@ -50,7 +58,8 @@ function SideButtons(props: { ymaps: YMapsApi | null, width: string }) {
         props.ymaps &&
         <>
             {
-                buttonsNames.map(([name, handler], index) => (
+                buttonsNames.map(([name, handler, access], index) => (
+                        access &&
                         <Button
                             key={index}
                             options={{
