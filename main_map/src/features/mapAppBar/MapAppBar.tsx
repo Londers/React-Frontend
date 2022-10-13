@@ -48,6 +48,8 @@ function MapAppBar() {
                         }
                     </Typography>
                     <Typography variant="h6" sx={{userSelect: "none"}}>
+                    </Typography>
+                    <Typography variant="h6" sx={{userSelect: "none"}}>
                         {login}
                     </Typography>
                 </Grid>

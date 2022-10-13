@@ -4,7 +4,7 @@ import './SideButtons.sass'
 import AreaDialog from "../../../common/AreaDialog";
 import {useAppSelector} from "../../../app/hooks";
 import {selectCirclesLength} from "../mapContentSlice";
-import {selectAccess} from "../acccountSlice";
+import {selectAccess, selectAvailableRegions} from "../acccountSlice";
 
 export const openTab = (path: string) => {
     window.open(window.location.origin + "/user/" + localStorage.getItem("login") + path)
@@ -22,7 +22,8 @@ function SideButtons(props: { ymaps: YMapsApi | null, width: string }) {
     const techArmAccess = access ? access[7] : false
     const greenStreetAccess = access ? access[8] : false
     const charPointsAccess = access ? access[9] : false
-
+    const graphAccess = access ? access[10] : false
+    const region= useAppSelector(selectAvailableRegions)
 
     const techArmButton = () => {
         setCallerPath("/techArm")
@@ -42,6 +43,7 @@ function SideButtons(props: { ymaps: YMapsApi | null, width: string }) {
         ["Произвольные ЗУ", () => openTab("/arbitraryGS"), greenStreetAccess],
         ["Управление по хар. точкам", () => openTab("/charPoints"), charPointsAccess],
         ["Предупреждения", alarmButton, true],
+        ["Подсистема графа", () => openTab("/graphManage?Region=" + region[0][0]), graphAccess],
     ]
 
     const setOpenMiddleware = (open: boolean, region: string, areas: string[]) => {

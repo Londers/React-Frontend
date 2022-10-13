@@ -12,7 +12,7 @@ function TrafficLightPlacemark(props: { trafficLight: Tflight, ymaps: YMapsApi |
 
     const getImage = (sost: number) => {
         if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
-            return `https://192.168.115.134:4443/free/img/trafficLights/${sost}.svg`
+            return `https://192.168.0.101:4443/free/img/trafficLights/${sost}.svg`
         } else {
             return window.location.origin + `/free/img/trafficLights/${sost}.svg`
         }
@@ -21,8 +21,10 @@ function TrafficLightPlacemark(props: { trafficLight: Tflight, ymaps: YMapsApi |
     const createChipsLayout = useCallback((calcFunc: Function, currnum: number, rotateDeg?: number) => {
         const Chips = props.ymaps?.templateLayoutFactory.createClass(
             '<div class="placemark"  ' +
-            `style="background-image:url(${getImage(currnum)}); ` +
-            `background-size: 100%; transform: rotate(${rotateDeg ?? 0}deg);\n"></div>`, {
+            `style="background-image:url(${getImage(currnum)}); display: revert; ` +
+            `background-size: 100%; transform: rotate(${rotateDeg ?? 0}deg);\n">`+
+                 // `<div>${trafficLight.ID}</div>` +
+            `</div>`, {
                 build: function () {
                     Chips.superclass.build.call(this);
                     const map = this.getData().geoObject.getMap();
