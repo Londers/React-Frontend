@@ -23,7 +23,7 @@ function SideButtons(props: { ymaps: YMapsApi | null, width: string }) {
     const greenStreetAccess = access ? access[8] : false
     const charPointsAccess = access ? access[9] : false
     const graphAccess = access ? access[10] : false
-    const region= useAppSelector(selectAvailableRegions)
+    const region = useAppSelector(selectAvailableRegions)
 
     const techArmButton = () => {
         setCallerPath("/techArm")

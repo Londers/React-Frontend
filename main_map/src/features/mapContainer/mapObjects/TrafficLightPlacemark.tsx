@@ -1,11 +1,13 @@
 import React, {useCallback, useMemo} from "react";
 import {Tflight} from "../../../common";
 import {Placemark, YMapsApi} from "react-yandex-maps";
-import {useAppDispatch} from "../../../app/hooks";
+import {useAppDispatch, useAppSelector} from "../../../app/hooks";
 import {handleTFLightClick} from "../../../common/Middlewares/CommonMiddleware";
 
 function TrafficLightPlacemark(props: { trafficLight: Tflight, ymaps: YMapsApi | null, showNumbers: boolean }) {
     const trafficLight = props.trafficLight
+    const statusS = useAppSelector(state => state.mapContent.statusS)
+    const statusBD = useAppSelector(state => state.mapContent.statusBD)
 
     const dispatch = useAppDispatch()
 
@@ -18,6 +20,7 @@ function TrafficLightPlacemark(props: { trafficLight: Tflight, ymaps: YMapsApi |
     }
 
     const createChipsLayout = useCallback((calcFunc: Function, currnum: number, rotateDeg?: number) => {
+        if (!statusS || !statusBD) currnum = 18
         let template = props.showNumbers ? `<div style="position: absolute; margin-left: 1vw">${trafficLight.ID}</div>` : ``
         template += '<div class="placemark"  ' +
             `style="background-image:url(${getImage(currnum)}); display: revert; ` +
