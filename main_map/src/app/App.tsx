@@ -5,6 +5,7 @@ import MapAppBar from "../features/mapAppBar/MapAppBar";
 import {useAppDispatch} from "./hooks";
 import {wsConnect} from "../common/Middlewares/WebSocketMiddleware";
 import SimpleBackdrop from "../common/SimpleBackdrop";
+import InputErrorAlerts from "../common/InputErrorAlerts";
 
 function App() {
     const dispatch = useAppDispatch()
@@ -22,6 +23,7 @@ function App() {
             <MapAppBar/>
             <MapContainer/>
             <SimpleBackdrop/>
+            <InputErrorAlerts/>
         </div>
     );
 }

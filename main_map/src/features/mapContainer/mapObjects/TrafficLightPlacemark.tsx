@@ -1,11 +1,10 @@
 import React, {useCallback, useMemo} from "react";
 import {Tflight} from "../../../common";
 import {Placemark, YMapsApi} from "react-yandex-maps";
-import {useAppDispatch, useAppSelector} from "../../../app/hooks";
-import {selectAuthorized} from "../acccountSlice";
+import {useAppDispatch} from "../../../app/hooks";
 import {handleTFLightClick} from "../../../common/Middlewares/CommonMiddleware";
 
-function TrafficLightPlacemark(props: { trafficLight: Tflight, ymaps: YMapsApi | null }) {
+function TrafficLightPlacemark(props: { trafficLight: Tflight, ymaps: YMapsApi | null, showNumbers: boolean }) {
     const trafficLight = props.trafficLight
 
     const dispatch = useAppDispatch()
@@ -19,12 +18,13 @@ function TrafficLightPlacemark(props: { trafficLight: Tflight, ymaps: YMapsApi |
     }
 
     const createChipsLayout = useCallback((calcFunc: Function, currnum: number, rotateDeg?: number) => {
-        const Chips = props.ymaps?.templateLayoutFactory.createClass(
-            '<div class="placemark"  ' +
+        let template = props.showNumbers ? `<div style="position: absolute; margin-left: 1vw">${trafficLight.ID}</div>` : ``
+        template += '<div class="placemark"  ' +
             `style="background-image:url(${getImage(currnum)}); display: revert; ` +
-            `background-size: 100%; transform: rotate(${rotateDeg ?? 0}deg);\n">`+
-                 // `<div>${trafficLight.ID}</div>` +
-            `</div>`, {
+            `background-size: 100%; transform: rotate(${rotateDeg ?? 0}deg);\n">` +
+            `</div>`
+        const Chips = props.ymaps?.templateLayoutFactory.createClass(
+            template, {
                 build: function () {
                     Chips.superclass.build.call(this);
                     const map = this.getData().geoObject.getMap();
@@ -65,7 +65,7 @@ function TrafficLightPlacemark(props: { trafficLight: Tflight, ymaps: YMapsApi |
             }
         )
         return Chips
-    }, [props.ymaps?.templateLayoutFactory])
+    }, [props.ymaps?.templateLayoutFactory, props.showNumbers, trafficLight.ID])
 
     //Мастшабирование иконок светофороф на карте
     const calculate = function (zoom: number): number {
@@ -79,9 +79,9 @@ function TrafficLightPlacemark(props: { trafficLight: Tflight, ymaps: YMapsApi |
             case 17:
                 return 60;
             case 18:
-                return 80;
+                return 65;
             case 19:
-                return 130;
+                return 70;
             default:
                 return 25;
         }

@@ -167,6 +167,7 @@ export interface MapContentState {
     multipleCrossSelect: boolean
     circles: Circle[]
     tflight: Tflight[]
+    openedAlerts: number
 }
 
 export interface Circle {

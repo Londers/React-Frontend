@@ -54,6 +54,7 @@ function MapContainer() {
 
     const [showAreas, setShowAreas] = useState<boolean>(false)
     const [showSubareas, setShowSubareas] = useState<boolean>(false)
+    const [showNumbers, setShowNumbers] = useState<boolean>(false)
 
     const width = "200"
 
@@ -109,6 +110,12 @@ function MapContainer() {
                                 <ListBoxItem data={{content: "Камеры"}}/>
                                 <ListBoxItem data={{content: "Направления"}}/>
                                 <ListBoxItem data={{content: "Трекер"}}/>
+                                <ListBoxItem
+                                    options={{selectOnClick: false}}
+                                    state={{selected: showNumbers}}
+                                    data={{content: "Номера СО"}}
+                                    onClick={() => setShowNumbers(!showNumbers)}
+                                />
                                 <ListBoxItem options={{type: "separator"}}/>
                             </>
                         }
@@ -126,7 +133,7 @@ function MapContainer() {
                     }
                     {trafficLights?.map(trafficLight =>
                         <TrafficLightPlacemark key={trafficLight.idevice} trafficLight={trafficLight}
-                                               ymaps={ymaps}/>
+                                               ymaps={ymaps} showNumbers={showNumbers}/>
                     )}
                     {showAreas && <AreasLayout />}
                     {showSubareas && <SubareasLayout />}

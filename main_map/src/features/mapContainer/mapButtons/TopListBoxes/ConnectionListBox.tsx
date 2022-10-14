@@ -1,10 +1,13 @@
-import {Alert, Box, Button, Collapse, IconButton} from "@mui/material";
+import {Alert, Box, Collapse, IconButton} from "@mui/material";
 import React, {useEffect} from "react";
 import {ListBox, ListBoxItem} from "react-yandex-maps";
-import {useAppSelector} from "../../../../app/hooks";
+import {useAppDispatch, useAppSelector} from "../../../../app/hooks";
 import CloseIcon from '@mui/icons-material/Close';
+import {decrementAlertsNumber, incrementAlertsNumber, selectAlertsNumber} from "../../mapContentSlice";
 
 function ConnectionListBox() {
+    const dispatch = useAppDispatch()
+
     const [open, setOpen] = React.useState(true);
 
     const statusS = useAppSelector(state => state.mapContent.statusS)
@@ -12,12 +15,13 @@ function ConnectionListBox() {
 
     useEffect(() => {
         setOpen(true)
+        if (!statusS || !statusBD) dispatch(incrementAlertsNumber())
     }, [statusS, statusBD])
 
     return (
         <>
             {(!statusS || !statusBD) &&
-                <Box sx={{ width: 'fit-content', position: "absolute", bottom: "5%", right: "3%", zIndex: 1, userSelect: "none"}}>
+                <Box sx={{ width: 'fit-content', position: "absolute", bottom: `${6}%`, right: "3%", zIndex: 1, userSelect: "none"}}>
                     <Collapse in={open}>
                         <Alert
                             severity="error"
@@ -27,6 +31,7 @@ function ConnectionListBox() {
                                     color="inherit"
                                     size="small"
                                     onClick={() => {
+                                        dispatch(decrementAlertsNumber())
                                         setOpen(false);
                                     }}
                                 >

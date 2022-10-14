@@ -19,7 +19,8 @@ const initialState: MapContentState = {
     multipleCrossSelect: false,
     circles: [],
     boxPoint: {point0: {Y: 53, X: 44}, point1: {Y: 55, X: 46}},
-    tflight: []
+    tflight: [],
+    openedAlerts: 0,
 }
 
 export const mapContentSlice = createSlice({
@@ -74,7 +75,15 @@ export const mapContentSlice = createSlice({
                     state.tflight.splice(index, 1, updatedTfl)
                 }
             })
-        }
+        },
+        incrementAlertsNumber: (state) => {
+            state.openedAlerts++
+            console.log(state.openedAlerts)
+        },
+        decrementAlertsNumber: (state) => {
+            state.openedAlerts--
+            console.log(state.openedAlerts)
+        },
     }
 })
 
@@ -88,7 +97,9 @@ export const {
     addCircle,
     deleteCircle,
     clearCircles,
-    setTFLights
+    setTFLights,
+    incrementAlertsNumber,
+    decrementAlertsNumber,
 } = mapContentSlice.actions
 
 export const selectTFLights = (state: RootState) => state.mapContent.tflight
@@ -96,5 +107,6 @@ export const selectMultipleCrossSelect = (state: RootState) => state.mapContent.
 export const selectCircles = (state: RootState) => state.mapContent.circles
 export const selectCirclesLength = (state: RootState) => state.mapContent.circles.length
 export const selectAreaZone = (state: RootState) => state.mapContent.areaZone
+export const selectAlertsNumber = (state: RootState) => state.mapContent.openedAlerts
 
 export default mapContentSlice.reducer
