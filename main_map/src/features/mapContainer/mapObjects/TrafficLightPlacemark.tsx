@@ -3,17 +3,25 @@ import {Tflight} from "../../../common";
 import {Placemark, YMapsApi} from "react-yandex-maps";
 import {useAppDispatch, useAppSelector} from "../../../app/hooks";
 import {handleTFLightClick} from "../../../common/Middlewares/CommonMiddleware";
+import {selectCameras, selectCamerasFlag} from "../mapContentSlice";
 
-function TrafficLightPlacemark(props: { trafficLight: Tflight, ymaps: YMapsApi | null, showNumbers: boolean }) {
+function TrafficLightPlacemark(props: { trafficLight: Tflight, ymaps: YMapsApi | null, zoom: number, showNumbers: boolean }) {
     const trafficLight = props.trafficLight
     const statusS = useAppSelector(state => state.mapContent.statusS)
     const statusBD = useAppSelector(state => state.mapContent.statusBD)
 
     const dispatch = useAppDispatch()
 
+    const camerasFlag = useAppSelector(selectCamerasFlag)
+    const cameras = useAppSelector(selectCameras).find(cams =>
+        (cams.region === Number(props.trafficLight.region.num)) && (cams.area === Number(props.trafficLight.area.num)) && (cams.id === props.trafficLight.id)
+    )
+
     const getImage = (sost: number) => {
+        let cams = ""
+        if (camerasFlag && cameras?.cams) cams = "cam"
         if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
-            return `https://192.168.0.101:4443/free/img/trafficLights/${sost}.svg`
+            return `https://192.168.0.101:4443/free/img/trafficLights/${sost}${cams}.svg`
         } else {
             return window.location.origin + `/free/img/trafficLights/${sost}.svg`
         }
@@ -21,7 +29,7 @@ function TrafficLightPlacemark(props: { trafficLight: Tflight, ymaps: YMapsApi |
 
     const createChipsLayout = useCallback((calcFunc: Function, currnum: number, rotateDeg?: number) => {
         if (!statusS || !statusBD) currnum = 18
-        let template = props.showNumbers ? `<div style="position: absolute; margin-left: 1vw">${trafficLight.ID}</div>` : ``
+        let template = props.showNumbers ? `<div style="position: absolute; margin-left: 1vw">${trafficLight.id}</div>` : ``
         template += '<div class="placemark"  ' +
             `style="background-image:url(${getImage(currnum)}); display: revert; ` +
             `background-size: 100%; transform: rotate(${rotateDeg ?? 0}deg);\n">` +
@@ -68,7 +76,7 @@ function TrafficLightPlacemark(props: { trafficLight: Tflight, ymaps: YMapsApi |
             }
         )
         return Chips
-    }, [props.ymaps?.templateLayoutFactory, props.showNumbers, trafficLight.ID])
+    }, [props.ymaps?.templateLayoutFactory, props.showNumbers, trafficLight.id, camerasFlag, cameras])
 
     //Мастшабирование иконок светофороф на карте
     const calculate = function (zoom: number): number {
@@ -94,7 +102,7 @@ function TrafficLightPlacemark(props: { trafficLight: Tflight, ymaps: YMapsApi |
         () => <Placemark key={trafficLight.idevice}
                          properties={{
                              hintContent: `${trafficLight.description}<br>${trafficLight.tlsost.description}<br>` +
-                                 `[${trafficLight.area.num}, ${trafficLight.subarea}, ${trafficLight.ID}, ${trafficLight.idevice}]`
+                                 `[${trafficLight.area.num}, ${trafficLight.subarea}, ${trafficLight.id}, ${trafficLight.idevice}]`
                          }}
                          options={{
                              iconLayout: createChipsLayout(calculate, trafficLight.tlsost.num)

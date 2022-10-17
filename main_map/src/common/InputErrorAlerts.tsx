@@ -11,7 +11,7 @@ function InputErrorAlerts() {
     return (
         <>
             {trafficLightsInputErrors.map((tflight, i) =>
-                <CustomAlert open={true} tflight={tflight} num={i}/>
+                <CustomAlert key={i} open={true} tflight={tflight} num={i}/>
             )}
         </>
     )

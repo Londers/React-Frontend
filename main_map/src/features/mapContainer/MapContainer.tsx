@@ -15,19 +15,21 @@ import {
 import {Grid} from "@mui/material";
 import SideButtons from "./mapButtons/SideButtons";
 import TopButtons from "./mapButtons/TopButtons";
-import {useAppSelector} from "../../app/hooks";
+import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import {selectAuthorized} from "./acccountSlice";
 import LoginDialog from "../login/LoginDialog";
 import TrafficLightPlacemark from "./mapObjects/TrafficLightPlacemark";
-import {selectCircles, selectTFLights} from "./mapContentSlice";
+import {selectCircles, selectTFLights, setCamerasSelect} from "./mapContentSlice";
 import CustomCircle from "./mapObjects/CustomCircle";
 import AboutModal from "../about/AboutModal";
 import AreasLayout from "./mapObjects/AreasLayout";
 import SubareasLayout from "./mapObjects/SubareasLayout";
+import {wsSendMessage} from "../../common/Middlewares/WebSocketMiddleware";
 
 export const MapContext = createContext<any | undefined>(undefined);
 
 function MapContainer() {
+    const dispatch = useAppDispatch()
     const mapRef = useRef<any>(null);
     const [ymaps, setYmaps] = useState<YMapsApi | null>(null)
 
@@ -54,7 +56,14 @@ function MapContainer() {
 
     const [showAreas, setShowAreas] = useState<boolean>(false)
     const [showSubareas, setShowSubareas] = useState<boolean>(false)
+    const [showCameras, setShowCameras] = useState<boolean>(false)
     const [showNumbers, setShowNumbers] = useState<boolean>(false)
+
+    const handleCamerasLayoutClick = () => {
+        dispatch(wsSendMessage({type: "getCameras"}))
+        dispatch(setCamerasSelect(!showCameras))
+        setShowCameras(!showCameras)
+    }
 
     const width = "200"
 
@@ -107,7 +116,12 @@ function MapContainer() {
                                     data={{content: "Подрайоны"}}
                                     onClick={() => setShowSubareas(!showSubareas)}
                                 />
-                                <ListBoxItem data={{content: "Камеры"}}/>
+                                <ListBoxItem
+                                    options={{selectOnClick: false}}
+                                    state={{selected: showCameras}}
+                                    data={{content: "Камеры"}}
+                                    onClick={handleCamerasLayoutClick}
+                                />
                                 <ListBoxItem data={{content: "Направления"}}/>
                                 <ListBoxItem data={{content: "Трекер"}}/>
                                 <ListBoxItem
@@ -133,7 +147,7 @@ function MapContainer() {
                     }
                     {trafficLights?.map(trafficLight =>
                         <TrafficLightPlacemark key={trafficLight.idevice} trafficLight={trafficLight}
-                                               ymaps={ymaps} showNumbers={showNumbers}/>
+                                               ymaps={ymaps} zoom={zoom} showNumbers={showNumbers}/>
                     )}
                     {showAreas && <AreasLayout />}
                     {showSubareas && <SubareasLayout />}

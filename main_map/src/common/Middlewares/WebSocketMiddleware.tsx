@@ -5,12 +5,12 @@ import {
     MapInfoMsg,
     TflightMsg,
     IncomingWebSocketMessage,
-    OutcomingWebSocketMessage, JumpMsg, RepaintMsg, ChangeFragmentsMsg, CheckConnMsg,
+    OutcomingWebSocketMessage, JumpMsg, RepaintMsg, ChangeFragmentsMsg, CheckConnMsg, GetCamerasMsg,
 } from "../index";
 import {fillAccountData, setLogouted, setLogged, setFragments} from "../../features/mapContainer/acccountSlice";
 import {
     setAreaZone,
-    setBoxPoint,
+    setBoxPoint, setCameras,
     setInitialData,
     setRepaint,
     setStatus,
@@ -66,6 +66,9 @@ WebSocketListenerMiddleware.startListening({
                     break;
                 case "deleteFragment":
                     listenerApi.dispatch(setFragments(action.payload.data as ChangeFragmentsMsg))
+                    break;
+                case "getCameras":
+                    listenerApi.dispatch(setCameras(action.payload.data as GetCamerasMsg))
                     break;
                 case "error":
                     break;

@@ -1,6 +1,6 @@
 import {
     CheckConnMsg,
-    Circle,
+    Circle, GetCamerasMsg,
     JumpMsg, LoginMsg,
     MapContentState,
     MapInfoMsg,
@@ -17,10 +17,12 @@ const initialState: MapContentState = {
     statusS: true,
     statusBD: true,
     multipleCrossSelect: false,
+    camerasFlag: false,
     circles: [],
     boxPoint: {point0: {Y: 53, X: 44}, point1: {Y: 55, X: 46}},
     tflight: [],
     openedAlerts: 0,
+    cameras: []
 }
 
 export const mapContentSlice = createSlice({
@@ -52,6 +54,9 @@ export const mapContentSlice = createSlice({
             state.multipleCrossSelect = !state.multipleCrossSelect
             if (!state.multipleCrossSelect) state.circles = []
         },
+        setCamerasSelect: (state, action: PayloadAction<boolean>) => {
+            state.camerasFlag = action.payload
+        },
         addCircle: (state, action: PayloadAction<Circle>) => {
             if (state.circles.length < 6) state.circles.push(action.payload)
         },
@@ -67,7 +72,7 @@ export const mapContentSlice = createSlice({
         setTFLights: (state, action: PayloadAction<TflightMsg>) => {
             action.payload.tflight.forEach(updatedTfl => {
                 const index = state.tflight.findIndex((oldTfl) =>
-                    ((oldTfl.region.num === updatedTfl.region.num) && (oldTfl.area.num === updatedTfl.area.num) && (oldTfl.ID === updatedTfl.ID))
+                    ((oldTfl.region.num === updatedTfl.region.num) && (oldTfl.area.num === updatedTfl.area.num) && (oldTfl.id === updatedTfl.id))
                 )
                 if (index === -1) {
                     state.tflight.push(updatedTfl)
@@ -78,11 +83,14 @@ export const mapContentSlice = createSlice({
         },
         incrementAlertsNumber: (state) => {
             state.openedAlerts++
-            console.log(state.openedAlerts)
+            // console.log(state.openedAlerts)
         },
         decrementAlertsNumber: (state) => {
             state.openedAlerts--
-            console.log(state.openedAlerts)
+            // console.log(state.openedAlerts)
+        },
+        setCameras: (state, action: PayloadAction<GetCamerasMsg>) => {
+            state.cameras = action.payload.cameras
         },
     }
 })
@@ -94,12 +102,14 @@ export const {
     setRepaint,
     setStatus,
     switchMultipleCrossSelect,
+    setCamerasSelect,
     addCircle,
     deleteCircle,
     clearCircles,
     setTFLights,
     incrementAlertsNumber,
     decrementAlertsNumber,
+    setCameras,
 } = mapContentSlice.actions
 
 export const selectTFLights = (state: RootState) => state.mapContent.tflight
@@ -108,5 +118,7 @@ export const selectCircles = (state: RootState) => state.mapContent.circles
 export const selectCirclesLength = (state: RootState) => state.mapContent.circles.length
 export const selectAreaZone = (state: RootState) => state.mapContent.areaZone
 export const selectAlertsNumber = (state: RootState) => state.mapContent.openedAlerts
+export const selectCamerasFlag = (state: RootState) => state.mapContent.camerasFlag
+export const selectCameras = (state: RootState) => state.mapContent.cameras
 
 export default mapContentSlice.reducer
