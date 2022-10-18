@@ -4,6 +4,7 @@ import {Placemark, YMapsApi} from "react-yandex-maps";
 import {useAppDispatch, useAppSelector} from "../../../app/hooks";
 import {handleTFLightClick} from "../../../common/Middlewares/CommonMiddleware";
 import {selectCameras, selectCamerasFlag} from "../mapContentSlice";
+import Cameras from "./Cameras";
 
 function TrafficLightPlacemark(props: { trafficLight: Tflight, ymaps: YMapsApi | null, zoom: number, showNumbers: boolean }) {
     const trafficLight = props.trafficLight
@@ -115,7 +116,9 @@ function TrafficLightPlacemark(props: { trafficLight: Tflight, ymaps: YMapsApi |
     )
 
     return (
-        memoizedPlacemark
+        (camerasFlag && cameras?.cams && props.zoom >= 17) ?
+            <Cameras ymaps={props.ymaps} camInfo={cameras} tflight={trafficLight}/> :
+            memoizedPlacemark
     )
 }
 
