@@ -15,7 +15,7 @@ function TrafficLightPlacemark(props: { trafficLight: Tflight, ymaps: YMapsApi |
 
     const camerasFlag = useAppSelector(selectCamerasFlag)
     const cameras = useAppSelector(selectCameras).find(cams =>
-        (cams.region === Number(props.trafficLight.region.num)) && (cams.area === Number(props.trafficLight.area.num)) && (cams.id === props.trafficLight.id)
+        (cams.region === Number(props.trafficLight.region.num)) && (cams.area === Number(props.trafficLight.area.num)) && (cams.id === props.trafficLight.ID)
     )
 
     const getImage = (sost: number) => {
@@ -39,7 +39,7 @@ function TrafficLightPlacemark(props: { trafficLight: Tflight, ymaps: YMapsApi |
 
     const createChipsLayout = useCallback((calcFunc: Function, currnum: number, rotateDeg?: number) => {
         if (!statusS || !statusBD) currnum = 18
-        let template = props.showNumbers ? `<div style="position: absolute; margin-left: 1vw">${trafficLight.id}</div>` : ``
+        let template = props.showNumbers ? `<div style="position: absolute; margin-left: 1vw">${trafficLight.ID}</div>` : ``
         template += '<div class="placemark"  ' +
             `style="background-image:url(${getImage(currnum)}); display: revert; ` +
             `background-size: 100%; transform: rotate(${rotateDeg ?? 0}deg);\n">` +
@@ -86,7 +86,7 @@ function TrafficLightPlacemark(props: { trafficLight: Tflight, ymaps: YMapsApi |
             }
         )
         return Chips
-    }, [props.ymaps?.templateLayoutFactory, props.showNumbers, trafficLight.id, camerasFlag, cameras])
+    }, [props.ymaps?.templateLayoutFactory, props.showNumbers, trafficLight.ID, camerasFlag, cameras])
 
     //Мастшабирование иконок светофороф на карте
     const calculate = function (zoom: number): number {
@@ -112,7 +112,7 @@ function TrafficLightPlacemark(props: { trafficLight: Tflight, ymaps: YMapsApi |
         () => <Placemark key={trafficLight.idevice}
                          properties={{
                              hintContent: `${trafficLight.description}<br>${trafficLight.tlsost.description}<br>` +
-                                 `[${trafficLight.area.num}, ${trafficLight.subarea}, ${trafficLight.id}, ${trafficLight.idevice}]`
+                                 `[${trafficLight.area.num}, ${trafficLight.subarea}, ${trafficLight.ID}, ${trafficLight.idevice}]`
                          }}
                          options={{
                              iconLayout: createChipsLayout(calculate, trafficLight.tlsost.num)

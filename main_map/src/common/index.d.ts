@@ -198,7 +198,7 @@ export interface Circle {
 }
 
 export interface Tflight {
-    id: number
+    ID: number
     region: Region
     area: Area2
     subarea: number

@@ -43,7 +43,7 @@ function CustomAlert(props: { open: boolean, tflight: Tflight, num: number }) {
                     }
                     sx={{mb: 2, border: "1px solid"}}
                 >
-                    Ошибка входов, {props.tflight.region.num} {props.tflight.area.num} {props.tflight.id}
+                    Ошибка входов, {props.tflight.region.num} {props.tflight.area.num} {props.tflight.ID}
                 </Alert>
             </Collapse>
         </Box>

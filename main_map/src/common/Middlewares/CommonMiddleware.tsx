@@ -17,14 +17,14 @@ CommonMiddleware.startListening({
             if (state.account.authorizedFlag) {
                 if (state.mapContent.multipleCrossSelect) {
                     const coords = [action.payload.points.Y, action.payload.points.X]
-                    const position = {region: action.payload.region.num, area: action.payload.area.num, id: action.payload.id}
+                    const position = {region: action.payload.region.num, area: action.payload.area.num, id: action.payload.ID}
                     if (state.mapContent.circles.some(circle => circle.coords.every((coord, index) => coord === coords[index]))) {
                         listenerApi.dispatch(deleteCircle({coords, position}))
                     } else {
                         listenerApi.dispatch(addCircle({coords, position}))
                     }
                 } else {
-                    const searchStr = 'Region=' + action.payload.region.num + '&Area=' + action.payload.area.num + '&ID=' + action.payload.id
+                    const searchStr = 'Region=' + action.payload.region.num + '&Area=' + action.payload.area.num + '&ID=' + action.payload.ID
                     openTab("/cross?" + searchStr)
                 }
             }
