@@ -1,6 +1,7 @@
 import React from "react";
 import {Placemark, Polygon, YMapsApi} from "react-yandex-maps";
-import {Camera, CamsInfo, Tflight} from "../../../common";
+import {CamsInfo, Tflight} from "../../../common";
+import {openTab} from "../mapButtons/SideButtons";
 
 // Условные значения для установки камер относительно центра перекрёстка (географ. коорд.) и угла обзора камер
 const lengthVar = 0.00015;
@@ -19,7 +20,7 @@ function Cameras(props: { ymaps: YMapsApi | null, camInfo: CamsInfo, tflight: Tf
         // if (!statusS || !statusBD) currnum = 18
         // let template = props.showNumbers ? `<div style="position: absolute; margin-left: 1vw">${trafficLight.id}</div>` : ``
         let template = '<div class="placemark"  ' +
-            `style="background-image:url(https://192.168.0.101:4443/free/img/trafficLights/cam.svg); display: revert; ` +
+            `style="background-image:url(https://192.168.0.101:4443/free/img/trafficLights/${props.tflight.inputError ? "camErr" : "cam"}.svg); display: revert; ` +
             `background-size: 100%; transform: rotate(${rotateDeg ?? 0}deg);\n">` +
             `</div>`
         const Chips = props.ymaps?.templateLayoutFactory.createClass(
@@ -68,7 +69,7 @@ function Cameras(props: { ymaps: YMapsApi | null, camInfo: CamsInfo, tflight: Tf
 
     return (
         <>
-            {props.camInfo.cams.map(cam => {
+            {props.camInfo.cams.map((cam, i) => {
                 const [y, x] = [props.tflight.points.Y, props.tflight.points.X]
                 const camAngleRadians = (360 - cam.cam) * (Math.PI / 180);
                 const camDirectionAngle = cam.area;
@@ -77,7 +78,7 @@ function Cameras(props: { ymaps: YMapsApi | null, camInfo: CamsInfo, tflight: Tf
                 const searchStr = 'Region=' + props.camInfo.region + '&Area=' + props.camInfo.area + '&ID=' + props.camInfo.id
 
                 return (
-                    <>
+                    <div key={i}>
                         <Placemark
                             geometry={[camY, camX]}
                             properties={{
@@ -87,7 +88,7 @@ function Cameras(props: { ymaps: YMapsApi | null, camInfo: CamsInfo, tflight: Tf
                                 iconLayout: createChipsLayout(camDirectionAngle)
                             }}
                             modules={['geoObject.addon.hint']}
-                            onClick={() => console.log(searchStr)}
+                            onClick={() => openTab('/cameras?' + searchStr)}
                         />
                         <Polygon
                             geometry={[[
@@ -97,7 +98,7 @@ function Cameras(props: { ymaps: YMapsApi | null, camInfo: CamsInfo, tflight: Tf
                             ]]}
                             properties={{fillColor: "rgba(0,255,0,0.15)", strokeWidth: 1}}
                         />
-                    </>
+                    </div>
                 )
             })}
         </>

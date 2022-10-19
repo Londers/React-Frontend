@@ -20,11 +20,20 @@ function TrafficLightPlacemark(props: { trafficLight: Tflight, ymaps: YMapsApi |
 
     const getImage = (sost: number) => {
         let cams = ""
-        if (camerasFlag && cameras?.cams) cams = "cam"
-        if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
-            return `https://192.168.0.101:4443/free/img/trafficLights/${sost}${cams}.svg`
+        let det = ""
+        if (camerasFlag && cameras?.cams) {
+            if (trafficLight.inputError) {
+                cams = "cdt"
+            } else {
+                cams = "cam"
+            }
         } else {
-            return window.location.origin + `/free/img/trafficLights/${sost}.svg`
+            det = trafficLight.inputError ? "det" : ""
+        }
+        if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+            return `https://192.168.0.101:4443/free/img/trafficLights/${sost}${cams}${det}.svg`
+        } else {
+            return window.location.origin + `/free/img/trafficLights/${sost}${cams}${det}.svg`
         }
     }
 
