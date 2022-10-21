@@ -139,7 +139,7 @@ function MapContainer() {
                     {authorized ?
                         <MapContext.Provider value={mapRef.current}>
                             <TopButtons ymaps={ymaps} width={width}/>
-                            <SideButtons ymaps={ymaps} width={width}/>
+                            <SideButtons ymaps={ymaps} width={width} bounds={bounds} zoom={zoom}/>
                             <AboutModal close={true} />
                         </MapContext.Provider>
                         :

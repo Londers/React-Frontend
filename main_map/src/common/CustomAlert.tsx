@@ -1,26 +1,16 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {Alert, Box, Collapse, IconButton} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import {Tflight} from "./index";
-import {useAppDispatch, useAppSelector} from "../app/hooks";
-import {
-    decrementAlertsNumber,
-    incrementAlertsNumber,
-    selectAlertsNumber
-} from "../features/mapContainer/mapContentSlice";
 
-function CustomAlert(props: { open: boolean, tflight: Tflight, num: number }) {
-    const dispatch = useAppDispatch()
+function CustomAlert(props: { open: boolean, tflight: Tflight, num: number, bottom: number, close: Function }) {
     const [open, setOpen] = useState(props.open)
-    const alertsNumber = useAppSelector(selectAlertsNumber)
-
-    useEffect(() => {dispatch(incrementAlertsNumber())}, [])
 
     return (
         <Box key={props.num} sx={{
             width: "fit-content",
             position: "absolute",
-            bottom: `${(alertsNumber - props.num) * 6}%`,
+            bottom: `${props.bottom}%`,
             right: "3%",
             zIndex: 1,
             userSelect: "none"
@@ -35,7 +25,7 @@ function CustomAlert(props: { open: boolean, tflight: Tflight, num: number }) {
                             size="small"
                             onClick={() => {
                                 setOpen(false)
-                                dispatch(decrementAlertsNumber())
+                                setTimeout(() => props.close(props.num), 300)
                             }}
                         >
                             <CloseIcon fontSize="inherit"/>

@@ -11,7 +11,7 @@ export const openTab = (path: string) => {
 }
 const indent = 25
 
-function SideButtons(props: { ymaps: YMapsApi | null, width: string }) {
+function SideButtons(props: { ymaps: YMapsApi | null, width: string, bounds: number[][], zoom: number }) {
     const [openDialog, setOpenDialog] = useState<boolean>(false)
     const [callerPath, setCallerPath] = useState<string>("")
 
@@ -34,13 +34,18 @@ function SideButtons(props: { ymaps: YMapsApi | null, width: string }) {
         setOpenDialog(true)
     }
 
+    const fillMapSettings = (path: string) => {
+        localStorage.setItem('mapSettings', JSON.stringify({bounds: props.bounds, zoom: props.zoom}))
+        openTab(path)
+    }
+
     const buttonsNames = [
         ["Сервер связи", techArmButton, techArmAccess],
         ["Журнал клиентов", () => openTab("/deviceLog"), deviceLogAccess],
         ["Журнал системы", () => openTab("/manage/serverLog"), true],
-        ["ДУ", () => openTab("/dispatchControl"), greenStreetAccess],
-        ["Стандартные ЗУ", () => openTab("/greenStreet"), greenStreetAccess],
-        ["Произвольные ЗУ", () => openTab("/arbitraryGS"), greenStreetAccess],
+        ["ДУ", () => fillMapSettings("/dispatchControl"), greenStreetAccess],
+        ["Стандартные ЗУ", () => fillMapSettings("/greenStreet"), greenStreetAccess],
+        ["Произвольные ЗУ", () => fillMapSettings("/arbitraryGS"), greenStreetAccess],
         ["Управление по хар. точкам", () => openTab("/charPoints"), charPointsAccess],
         ["Предупреждения", alarmButton, true],
         ["Подсистема графа", () => openTab("/graphManage?Region=" + region[0][0]), graphAccess],

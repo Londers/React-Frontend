@@ -7,7 +7,7 @@ import {
     Typography
 } from "@mui/material";
 import {useAppSelector} from "../../app/hooks";
-import {selectRegionDesc} from "../mapContainer/acccountSlice";
+import {selectAuthorized, selectRegionDesc} from "../mapContainer/acccountSlice";
 
 
 const darkTheme = createTheme({
@@ -24,6 +24,7 @@ function MapAppBar() {
     const region = useAppSelector(selectRegionDesc)
     const description = useAppSelector(state => state.account.description)
     const login = localStorage.getItem("login")
+    const auth = useAppSelector(selectAuthorized)
 
     return (
         <ThemeProvider theme={darkTheme}>
@@ -50,7 +51,7 @@ function MapAppBar() {
                     <Typography variant="h6" sx={{userSelect: "none"}}>
                     </Typography>
                     <Typography variant="h6" sx={{userSelect: "none"}}>
-                        {login}
+                        {auth ? login : ""}
                     </Typography>
                 </Grid>
             </AppBar>
