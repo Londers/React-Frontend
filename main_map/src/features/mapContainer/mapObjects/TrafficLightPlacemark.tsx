@@ -6,6 +6,37 @@ import {handleTFLightClick} from "../../../common/Middlewares/CommonMiddleware";
 import {selectCameras, selectCamerasFlag} from "../mapContentSlice";
 import Cameras from "./Cameras";
 
+const getInputErrorString = (tflight: Tflight): string => {
+    if (!tflight.inputError) return ""
+
+    const inputErrors = {...tflight.input}
+    delete inputErrors.S
+    const statErrors = [...tflight.input?.S]
+
+    const input = Object.values(inputErrors).map(err => err)
+    const stat = statErrors.map((err: boolean) => err)
+
+    let result = ""
+    if (input.some(inp => inp)) {
+        result += "Ошибка входов ("
+        input.forEach((inp, index) => {
+            if (inp) result += (index + 1) + ", "
+        })
+        result = result.slice(0, result.length - 2)
+        result += "),"
+    }
+    if (stat.some(sm => sm)) {
+        result += " Ошибка статистики ("
+        stat.forEach((sm, index) => {
+            if (sm) result += (index + 1) + ", "
+        })
+        result = result.slice(0, result.length - 2)
+        result += "),"
+    }
+    result = result.slice(0, result.length - 1)
+    return result
+}
+
 function TrafficLightPlacemark(props: { trafficLight: Tflight, ymaps: YMapsApi | null, zoom: number, showNumbers: boolean }) {
     const trafficLight = props.trafficLight
     const statusS = useAppSelector(state => state.mapContent.statusS)
@@ -31,7 +62,8 @@ function TrafficLightPlacemark(props: { trafficLight: Tflight, ymaps: YMapsApi |
             det = trafficLight.inputError ? "det" : ""
         }
         if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
-            return `https://192.168.0.101:4443/free/img/trafficLights/${sost}${cams}${det}.svg`
+            return `https://192.168.115.134:4443/free/img/trafficLights/${sost}${cams}${det}.svg`
+            // return `https://192.168.0.101:4443/free/img/trafficLights/${sost}${cams}${det}.svg`
         } else {
             return window.location.origin + `/free/img/trafficLights/${sost}${cams}${det}.svg`
         }
@@ -112,7 +144,8 @@ function TrafficLightPlacemark(props: { trafficLight: Tflight, ymaps: YMapsApi |
         () => <Placemark key={trafficLight.idevice}
                          properties={{
                              hintContent: `${trafficLight.description}<br>${trafficLight.tlsost.description}<br>` +
-                                 `[${trafficLight.area.num}, ${trafficLight.subarea}, ${trafficLight.ID}, ${trafficLight.idevice}]`
+                                 `[${trafficLight.area.num}, ${trafficLight.subarea}, ${trafficLight.ID}, ${trafficLight.idevice}]<br>` +
+                                 `${getInputErrorString(trafficLight)}`
                          }}
                          options={{
                              iconLayout: createChipsLayout(calculate, trafficLight.tlsost.num)

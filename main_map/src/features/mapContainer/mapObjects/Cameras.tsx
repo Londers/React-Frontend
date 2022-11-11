@@ -20,7 +20,7 @@ function Cameras(props: { ymaps: YMapsApi | null, camInfo: CamsInfo, tflight: Tf
         // if (!statusS || !statusBD) currnum = 18
         // let template = props.showNumbers ? `<div style="position: absolute; margin-left: 1vw">${trafficLight.id}</div>` : ``
         let template = '<div class="placemark"  ' +
-            `style="background-image:url(https://192.168.0.101:4443/free/img/trafficLights/${props.tflight.inputError ? "camErr" : "cam"}.svg); display: revert; ` +
+            `style="background-image:url(${window.location.origin}/free/img/trafficLights/${props.tflight.inputError ? "camErr" : "cam"}.svg); display: revert; ` +
             `background-size: 100%; transform: rotate(${rotateDeg ?? 0}deg);\n">` +
             `</div>`
         const Chips = props.ymaps?.templateLayoutFactory.createClass(
@@ -71,8 +71,8 @@ function Cameras(props: { ymaps: YMapsApi | null, camInfo: CamsInfo, tflight: Tf
         <>
             {props.camInfo.cams.map((cam, i) => {
                 const [y, x] = [props.tflight.points.Y, props.tflight.points.X]
-                const camAngleRadians = (360 - cam.cam) * (Math.PI / 180);
-                const camDirectionAngle = cam.area;
+                const camAngleRadians = (360 - cam.angleCam) * (Math.PI / 180);
+                const camDirectionAngle = cam.angleArea;
                 const camX = x + lengthVar * Math.cos(camAngleRadians)
                 const camY = y + lengthVar * Math.sin(camAngleRadians)
                 const searchStr = 'Region=' + props.camInfo.region + '&Area=' + props.camInfo.area + '&ID=' + props.camInfo.id

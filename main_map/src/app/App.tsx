@@ -12,7 +12,8 @@ function App() {
 
     useEffect(() => {
         if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
-            dispatch(wsConnect("wss://192.168.0.101:4443/mapW"))
+            // dispatch(wsConnect("wss://192.168.0.101:4443/mapW"))
+            dispatch(wsConnect("wss://192.168.115.134:4443/mapW"))
         } else {
             dispatch(wsConnect(`wss://${window.location.host}/mapW`))
         }

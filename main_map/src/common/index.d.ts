@@ -157,8 +157,8 @@ export interface CamsInfo {
 
 export interface Camera {
     ip: string
-    cam: number
-    area: number
+    angleCam: number
+    angleArea: number
     name: string
     controls: any
 }
@@ -208,6 +208,19 @@ export interface Tflight {
     phases: number[]
     points: Points
     inputError: boolean
+    input?: Input
+}
+
+export interface Input {
+    V1: boolean
+    V2: boolean
+    V3: boolean
+    V4: boolean
+    V5: boolean
+    V6: boolean
+    V7: boolean
+    V8: boolean
+    S: boolean[16]
 }
 
 export interface Pos {
