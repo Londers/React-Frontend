@@ -5,6 +5,7 @@ import {useAppDispatch, useAppSelector} from "../../../app/hooks";
 import {handleTFLightClick} from "../../../common/Middlewares/CommonMiddleware";
 import {selectCameras, selectCamerasFlag} from "../mapContentSlice";
 import Cameras from "./Cameras";
+import {selectAuthorized} from "../acccountSlice";
 
 const getInputErrorString = (tflight: Tflight): string => {
     if (!tflight.inputError) return ""
@@ -44,6 +45,7 @@ function TrafficLightPlacemark(props: { trafficLight: Tflight, ymaps: YMapsApi |
 
     const dispatch = useAppDispatch()
 
+    const authorized = useAppSelector(selectAuthorized)
     const camerasFlag = useAppSelector(selectCamerasFlag)
     const cameras = useAppSelector(selectCameras).find(cams =>
         (cams.region === Number(props.trafficLight.region.num)) && (cams.area === Number(props.trafficLight.area.num)) && (cams.id === props.trafficLight.ID)
@@ -118,7 +120,7 @@ function TrafficLightPlacemark(props: { trafficLight: Tflight, ymaps: YMapsApi |
             }
         )
         return Chips
-    }, [props.ymaps?.templateLayoutFactory, props.showNumbers, trafficLight.ID, camerasFlag, cameras])
+    }, [statusS, statusBD, props.showNumbers, props.ymaps?.templateLayoutFactory, trafficLight.ID, getImage])
 
     //Мастшабирование иконок светофороф на карте
     const calculate = function (zoom: number): number {
@@ -143,9 +145,9 @@ function TrafficLightPlacemark(props: { trafficLight: Tflight, ymaps: YMapsApi |
     const memoizedPlacemark = useMemo(
         () => <Placemark key={trafficLight.idevice}
                          properties={{
-                             hintContent: `${trafficLight.description}<br>${trafficLight.tlsost.description}<br>` +
+                             hintContent: authorized ? (`${trafficLight.description}<br>${trafficLight.tlsost.description}<br>` +
                                  `[${trafficLight.area.num}, ${trafficLight.subarea}, ${trafficLight.ID}, ${trafficLight.idevice}]<br>` +
-                                 `${getInputErrorString(trafficLight)}`
+                                 `${getInputErrorString(trafficLight)}`) : ""
                          }}
                          options={{
                              iconLayout: createChipsLayout(calculate, trafficLight.tlsost.num)

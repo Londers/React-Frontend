@@ -2,17 +2,21 @@ import React, {useState} from "react";
 import {ListBox, ListBoxItem} from "react-yandex-maps";
 import {openTab} from "../SideButtons";
 import AboutModal from "../../../about/AboutModal";
+import axios from "axios";
+import TechSuppDialog from "../../../techSupp/TechSuppDialog";
 
 function HelpListBox(props: { layout: any }) {
     const [expanded, setExpanded] = useState<boolean>(false)
     const [showAboutModal, setShowAboutModal] = useState<boolean>(false)
+    const [showTechSuppDialog, setShowTechSuppDialog] = useState<boolean>(false)
 
     const handleAboutModalClick = () => {
         setShowAboutModal(true)
     }
 
     const handleTechSuppClick = () => {
-        openTab("/techSupp")
+        setShowTechSuppDialog(true)
+        // openTab("/techSupp")
         setExpanded(false)
     }
 
@@ -37,6 +41,7 @@ function HelpListBox(props: { layout: any }) {
                              onClick={handleTechSuppClick}/>
             </ListBox>
             {showAboutModal && <AboutModal handleClose={() => setShowAboutModal(false)}/>}
+            {showTechSuppDialog && <TechSuppDialog handleClose={() => setShowTechSuppDialog(false)}/>}
         </>
     )
 }
