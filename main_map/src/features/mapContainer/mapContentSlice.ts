@@ -1,6 +1,6 @@
 import {
     CheckConnMsg,
-    Circle, GetCamerasMsg,
+    Circle, EditCrossUsersMsg, GetCamerasMsg,
     JumpMsg, LoginMsg,
     MapContentState,
     MapInfoMsg,
@@ -22,7 +22,8 @@ const initialState: MapContentState = {
     boxPoint: {point0: {Y: 53, X: 44}, point1: {Y: 55, X: 46}},
     tflight: [],
     openedAlerts: 0,
-    cameras: []
+    cameras: [],
+    editCrossUser: []
 }
 
 export const mapContentSlice = createSlice({
@@ -83,14 +84,15 @@ export const mapContentSlice = createSlice({
         },
         incrementAlertsNumber: (state) => {
             state.openedAlerts++
-            // console.log(state.openedAlerts)
         },
         decrementAlertsNumber: (state) => {
             state.openedAlerts--
-            // console.log(state.openedAlerts)
         },
         setCameras: (state, action: PayloadAction<GetCamerasMsg>) => {
             state.cameras = action.payload.cameras
+        },
+        setEditCrossUsers: (state, action: PayloadAction<EditCrossUsersMsg>) => {
+            state.editCrossUser = action.payload.editCrossUsers
         },
     }
 })
@@ -110,6 +112,7 @@ export const {
     incrementAlertsNumber,
     decrementAlertsNumber,
     setCameras,
+    setEditCrossUsers,
 } = mapContentSlice.actions
 
 export const selectTFLights = (state: RootState) => state.mapContent.tflight
@@ -120,5 +123,10 @@ export const selectAreaZone = (state: RootState) => state.mapContent.areaZone
 export const selectAlertsNumber = (state: RootState) => state.mapContent.openedAlerts
 export const selectCamerasFlag = (state: RootState) => state.mapContent.camerasFlag
 export const selectCameras = (state: RootState) => state.mapContent.cameras
+export const selectIsInEditing = (region: string, area: string, id: number) => (state: RootState) => {
+    const edit = state.mapContent.editCrossUser.find(cross => (cross.pos.region === region) && (cross.pos.area === area) && cross.pos.id === id)
+    if (edit) return [true, edit.login]
+    return [false, ""]
+}
 
 export default mapContentSlice.reducer

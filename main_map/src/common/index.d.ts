@@ -15,6 +15,7 @@ export type IncomingDataType =
     | FragmentMsg
     | ChangeFragmentsMsg
     | GetCamerasMsg
+
     | ErrorMsg
 
 export type OutcomingWebSocketMessage = OutcomingDataType
@@ -129,6 +130,10 @@ export interface GetCamerasMsg {
     cameras: CamsInfo[]
 }
 
+export interface EditCrossUsersMsg {
+    editCrossUsers: EditCrossUser[];
+}
+
 export interface SendCreateFragmentMsg {
     type: string
     data: {
@@ -146,6 +151,14 @@ export interface SendDeleteFragmentMsg {
 
 export interface ErrorMsg {
     message: { error: string }
+}
+
+export interface EditCrossUser {
+    edit: boolean;
+    idevice: number;
+    pos: Pos;
+    description: string;
+    login: string;
 }
 
 export interface CamsInfo {
@@ -190,6 +203,7 @@ export interface MapContentState {
     tflight: Tflight[]
     openedAlerts: number
     cameras: CamsInfo[]
+    editCrossUser: EditCrossUser[]
 }
 
 export interface Circle {

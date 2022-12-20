@@ -5,12 +5,12 @@ import {
     MapInfoMsg,
     TflightMsg,
     IncomingWebSocketMessage,
-    OutcomingWebSocketMessage, JumpMsg, RepaintMsg, ChangeFragmentsMsg, CheckConnMsg, GetCamerasMsg,
+    OutcomingWebSocketMessage, JumpMsg, RepaintMsg, ChangeFragmentsMsg, CheckConnMsg, GetCamerasMsg, EditCrossUsersMsg,
 } from "../index";
 import {fillAccountData, setLogouted, setLogged, setFragments} from "../../features/mapContainer/acccountSlice";
 import {
     setAreaZone,
-    setBoxPoint, setCameras,
+    setBoxPoint, setCameras, setEditCrossUsers,
     setInitialData,
     setRepaint,
     setStatus,
@@ -57,6 +57,7 @@ WebSocketListenerMiddleware.startListening({
                     listenerApi.dispatch(setLogouted(action.payload.data as LogoutMsg))
                     break;
                 case "editCrossUsers":
+                    listenerApi.dispatch(setEditCrossUsers(action.payload.data as EditCrossUsersMsg))
                     break;
                 case "checkConn":
                     listenerApi.dispatch(setStatus(action.payload.data as CheckConnMsg))

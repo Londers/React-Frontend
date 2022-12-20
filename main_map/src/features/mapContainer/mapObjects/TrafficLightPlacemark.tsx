@@ -3,7 +3,7 @@ import {Tflight} from "../../../common";
 import {Placemark, YMapsApi} from "react-yandex-maps";
 import {useAppDispatch, useAppSelector} from "../../../app/hooks";
 import {handleTFLightClick} from "../../../common/Middlewares/CommonMiddleware";
-import {selectCameras, selectCamerasFlag} from "../mapContentSlice";
+import {selectCameras, selectCamerasFlag, selectIsInEditing} from "../mapContentSlice";
 import Cameras from "./Cameras";
 import {selectAuthorized} from "../acccountSlice";
 
@@ -45,6 +45,7 @@ function TrafficLightPlacemark(props: { trafficLight: Tflight, ymaps: YMapsApi |
 
     const dispatch = useAppDispatch()
 
+    const [inEdit, login] = useAppSelector(selectIsInEditing(trafficLight.region.num, trafficLight.area.num, trafficLight.ID))
     const authorized = useAppSelector(selectAuthorized)
     const camerasFlag = useAppSelector(selectCamerasFlag)
     const cameras = useAppSelector(selectCameras).find(cams =>
@@ -147,7 +148,7 @@ function TrafficLightPlacemark(props: { trafficLight: Tflight, ymaps: YMapsApi |
                          properties={{
                              hintContent: authorized ? (`${trafficLight.description}<br>${trafficLight.tlsost.description}<br>` +
                                  `[${trafficLight.area.num}, ${trafficLight.subarea}, ${trafficLight.ID}, ${trafficLight.idevice}]<br>` +
-                                 `${getInputErrorString(trafficLight)}`) : ""
+                                 `${getInputErrorString(trafficLight)}${inEdit ? "<br>Управляется пользователем " + login : ""}`) : ""
                          }}
                          options={{
                              iconLayout: createChipsLayout(calculate, trafficLight.tlsost.num)
