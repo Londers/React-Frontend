@@ -28,7 +28,7 @@ function AreaDialog(props: { open: boolean, setOpen: Function, showAreas: boolea
             if (selectedAreas.some(area => area === areaName)) selectedAreaNums.push(areaNum)
         }
         // props.setSelectedAreas(selectedAreaNums)
-        setOpen(false, userRegion[0] ? userRegion[0][0] : "-1", selectedAreaNums.length === 0 ? Object.keys(area) : selectedAreaNums)
+        setOpen(false, region, selectedAreaNums.length === 0 ? Object.keys(area) : selectedAreaNums)
         setSelectedAreas([])
     }
     const handleClose = () => {
@@ -45,6 +45,7 @@ function AreaDialog(props: { open: boolean, setOpen: Function, showAreas: boolea
         return userArea[1] ?? {}
     }, [userAreas, userRegion])
 
+    const [region, setRegion] = useState<string>(userRegion[0] ? userRegion[0][0] : "-1")
     const [area, setArea] = useState<Area>(getArea(userRegion[0] ? userRegion[0][0] : "-1"))
     const [selectedAreas, setSelectedAreas] = useState<string[]>([]);
 
@@ -52,7 +53,12 @@ function AreaDialog(props: { open: boolean, setOpen: Function, showAreas: boolea
         setArea(getArea(userRegion[0] ? userRegion[0][0] : "-1"))
     }, [getArea, userRegion])
 
+    useEffect(() => {
+        if (region === "-1") setRegion(userRegion[0] ? userRegion[0][0] : "-1")
+    }, [userRegion])
+
     const handleRegionChange = (event: SelectChangeEvent) => {
+        setRegion(event.target.value)
         setArea(getArea(event.target.value))
         setSelectedAreas([])
     }
@@ -74,7 +80,7 @@ function AreaDialog(props: { open: boolean, setOpen: Function, showAreas: boolea
                     <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        value={userRegion[0] ? userRegion[0][0] : "-1"}
+                        value={region}
                         label="Регион"
                         disabled={userRegion.length === 1}
                         onChange={handleRegionChange}
