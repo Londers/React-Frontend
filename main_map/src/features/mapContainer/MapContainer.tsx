@@ -25,6 +25,7 @@ import AboutModal from "../about/AboutModal";
 import AreasLayout from "./mapObjects/AreasLayout";
 import SubareasLayout from "./mapObjects/SubareasLayout";
 import {wsSendMessage} from "../../common/Middlewares/WebSocketMiddleware";
+import {Tflight} from "../../common";
 
 export const MapContext = createContext<any | undefined>(undefined);
 
@@ -67,6 +68,74 @@ function MapContainer() {
 
     const width = "200"
 
+    // Провайдер данных для элемента управления ymaps.control.SearchControl.
+    // Осуществляет поиск геообъектов в по массиву points.
+    // Реализует интерфейс IGeocodeProvider.
+    function CustomSearchProvider(points: Tflight[]) {
+        //@ts-ignore
+        this.points = points;
+    }
+
+    // Провайдер ищет по полю text стандартным методом String.ptototype.indexOf.
+    CustomSearchProvider.prototype.geocode = function (request: string, options: { skip: number, results: number }) {
+        //@ts-ignore
+        let deferred = new ymaps.vow.defer(),
+            //@ts-ignore
+            geoObjects = new ymaps.GeoObjectCollection(),
+            // Сколько результатов нужно пропустить.
+            offset = options.skip || 0,
+            // Количество возвращаемых результатов.
+            limit = options.results || 20;
+
+        let points: Tflight[] = [];
+        // Ищем в свойстве text каждого элемента массива.
+        for (let i = 0, l = this.points.length; i < l; i++) {
+            let point = this.points[i];
+            if (point.description.toLowerCase().indexOf(request.toLowerCase()) !== -1) {
+                points.push(point);
+            } else if (point.idevice.toString().indexOf(request.toLowerCase()) !== -1) {
+                points.push(point);
+            }
+        }
+        // При формировании ответа можно учитывать offset и limit.
+        points = points.splice(offset, limit);
+        // Добавляем точки в результирующую коллекцию.
+        for (let i = 0, l = points.length; i < l; i++) {
+            let point = points[i],
+                coords = [point.points.Y, point.points.X],
+                text = point.description;
+            //@ts-ignore
+            geoObjects.add(new ymaps.Placemark(coords, {
+                name: text,
+                description: text,
+                balloonContentBody: '<p>' + text + '</p>',
+                boundedBy: [coords, coords]
+            }));
+        }
+
+        deferred.resolve({
+            // Геообъекты поисковой выдачи.
+            geoObjects: geoObjects,
+            // Метаинформация ответа.
+            metaData: {
+                geocoder: {
+                    // Строка обработанного запроса.
+                    request: request,
+                    // Количество найденных результатов.
+                    found: geoObjects.getLength(),
+                    // Количество возвращенных результатов.
+                    results: limit,
+                    // Количество пропущенных результатов.
+                    skip: offset
+                }
+            }
+        });
+
+        // Возвращаем объект-обещание.
+        return deferred.promise();
+    };
+
+    // @ts-ignore
     return (
         <Grid container height={"96.5vh"}>
             <YMaps query={{apikey: "65162f5f-2d15-41d1-a881-6c1acf34cfa1", lang: "ru_RU"}}>
@@ -77,7 +146,7 @@ function MapContainer() {
                             // ymapsRef.current = ref
                         }
                     }}
-                    modules={["templateLayoutFactory"]}
+                    modules={["templateLayoutFactory", "GeoObjectCollection"]}
                     state={mapState}
                     instanceRef={(ref) => {
                         if (ref) {
@@ -96,8 +165,11 @@ function MapContainer() {
                         // }}
                         options={{
                             float: "left",
-                            provider: "yandex#search",
-                            size: "large"
+                            //@ts-ignore
+                            provider: new CustomSearchProvider(trafficLights),
+                            size: "large",
+                            resultsPerPage: 5,
+                            noPlacemark: true,
                         }}
                     />
                     <TrafficControl options={{float: 'right'}}/>
@@ -140,7 +212,7 @@ function MapContainer() {
                         <MapContext.Provider value={mapRef.current}>
                             <TopButtons ymaps={ymaps} width={width}/>
                             <SideButtons ymaps={ymaps} width={width} bounds={bounds} zoom={zoom}/>
-                            <AboutModal close={true} />
+                            <AboutModal close={true}/>
                         </MapContext.Provider>
                         :
                         <LoginDialog width={width}/>
@@ -149,8 +221,8 @@ function MapContainer() {
                         <TrafficLightPlacemark key={trafficLight.idevice} trafficLight={trafficLight}
                                                ymaps={ymaps} zoom={zoom} showNumbers={showNumbers}/>
                     )}
-                    {showAreas && <AreasLayout />}
-                    {showSubareas && <SubareasLayout />}
+                    {showAreas && <AreasLayout/>}
+                    {showSubareas && <SubareasLayout/>}
                     {circles?.map((circle, index) =>
                         <CustomCircle key={index} circle={circle} zoom={zoom}/>
                     )}
