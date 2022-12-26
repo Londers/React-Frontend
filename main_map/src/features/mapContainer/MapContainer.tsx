@@ -87,6 +87,7 @@ function MapContainer() {
             // Количество возвращаемых результатов.
             limit = options.results || 20;
 
+        if (!authorized) limit = 0
         let points: Tflight[] = [];
         // Ищем в свойстве text каждого элемента массива.
         for (let i = 0, l = this.points.length; i < l; i++) {
@@ -107,7 +108,7 @@ function MapContainer() {
             //@ts-ignore
             geoObjects.add(new ymaps.Placemark(coords, {
                 name: text,
-                description: text,
+                description: "№модема " + point.idevice,
                 balloonContentBody: '<p>' + text + '</p>',
                 boundedBy: [coords, coords]
             }));
@@ -135,7 +136,6 @@ function MapContainer() {
         return deferred.promise();
     };
 
-    // @ts-ignore
     return (
         <Grid container height={"96.5vh"}>
             <YMaps query={{apikey: "65162f5f-2d15-41d1-a881-6c1acf34cfa1", lang: "ru_RU"}}>

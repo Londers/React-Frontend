@@ -31,8 +31,8 @@ function TechSuppDialog(props: {handleClose: Function}) {
     return (
         <Dialog open={open} onClose={handleClose}>
             <DialogTitle>Техническая поддержка</DialogTitle>
-            <DialogContent>
-                <TextField onChange={(event) => {
+            <DialogContent style={{width: "30vw"}} >
+                <TextField fullWidth multiline={true} rows={10} onChange={(event) => {
                     setText(event.target.value)
                 }}/>
             </DialogContent>
