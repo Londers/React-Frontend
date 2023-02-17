@@ -319,3 +319,9 @@ export interface Points {
     Y: number
     X: number
 }
+
+export interface PassRequest {
+    login: string
+    message: string
+    pass: string
+}
